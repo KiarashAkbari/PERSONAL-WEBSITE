@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kiarash Akbari — AI Software Engineer. Backend & AI-integrated systems: RAG pipelines, anomaly detection, offline-first tooling. Personnel dossier." />
+    <meta name="theme-color" content="#f4f2ec" />
+    <!-- color-scheme mastery: we ship our own dual-optic theme, so UAs
+         must never force-transform the page (Chrome/Edge "Auto Dark") -->
+    <meta name="color-scheme" content="light dark" />
+    <!-- official Dark Reader opt-out — read by the extension at
+         document_start, before it injects anything -->
+    <meta name="darkreader-lock" content="" />
+    <title>KIARASH AKBARI — AI_SOFTWARE_ENGINEER.SYS</title>
+    <!-- Typography is 100% system Helvetica — zero webfont download, instant first paint.
+         (ASCII plotting surfaces use the OS monospace stack; characters there are
+          coordinates, not prose, and must stay grid-aligned.) -->
+    <script>
+      /* anti-FOUC theme bootstrap — runs before first paint.
+         "only light" forbids UA forced-darkening of the day optic;
+         "dark" tells the UA the night optic is natively dark. */
+      (function () {
+        try {
+          var stored = localStorage.getItem("kia-theme");
+          var dark = stored
+            ? stored === "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var root = document.documentElement;
+          root.classList.toggle("dark", dark);
+          root.style.colorScheme = dark ? "dark" : "only light";
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", dark ? "#22201c" : "#f4f2ec");
+        } catch (e) {}
+      })();
+    </script>
+    <script>
+      /* ============================================================
+         DARK-EXTENSION GUARD (best-effort backup to the
+         <meta name="darkreader-lock"> above)
+         Some dark-theme extensions/clones ignore the official lock
+         and inject <style> overrides + data-* flags that recolor the
+         crafted palette. This sweeps known artifacts once and keeps
+         sweeping as they retry. It only ever REMOVES foreign nodes
+         — never our own styles — and converges (removal triggers one
+         final observer pass with nothing left to do).
+         ============================================================ */
+      (function () {
+        if (typeof MutationObserver === "undefined") return;
+        var BAD = /darkreader|night-?eye|dark-bg|darkmode/i;
+        var sweep = function () {
+          /* injected override stylesheets */
+          var nodes = document.querySelectorAll(
+            "style[class], style[id], link[rel='stylesheet'][id]"
+          );
+          for (var i = 0; i < nodes.length; i++) {
+            var el = nodes[i];
+            var sig = (el.className || "") + " " + (el.id || "");
+            if (BAD.test(sig)) el.parentNode.removeChild(el);
+          }
+          /* injected marker attributes on <html>/<body> (some engines
+             skip work when they think the page is already processed —
+             stripping keeps our palette source-of-truth) */
+          var roots = [document.documentElement, document.body];
+          for (var r = 0; r < roots.length; r++) {
+            var node = roots[r];
+            if (!node || !node.getAttributeNames) continue;
+            var attrs = node.getAttributeNames();
+            for (var a = 0; a < attrs.length; a++) {
+              if (BAD.test(attrs[a])) node.removeAttribute(attrs[a]);
+            }
+          }
+        };
+        /* node injections anywhere (primary attack vector)… */
+        new MutationObserver(sweep).observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+        /* …but attribute sweeps only on <html>/<body>, so routine
+           class toggles elsewhere never trigger the sweep */
+        var attrObserver = new MutationObserver(sweep);
+        attrObserver.observe(document.documentElement, { attributes: true });
+        if (document.body) attrObserver.observe(document.body, { attributes: true });
+        sweep();
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

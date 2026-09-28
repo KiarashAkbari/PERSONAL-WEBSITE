@@ -1,0 +1,479 @@
+@import "tailwindcss";
+
+/* ============================================================
+   THEME SYSTEM — dual-optic ( DAY / NIGHT )
+   Semantic tokens: --paper = surface, --ink = foreground.
+   Dark mode swaps the pair so every "inverted" panel stays
+   conceptually inverted in both optics. Accent is re-tuned
+   per optic for contrast.
+
+   FRIENDLINESS PASS: day optic sits on a soft warm white with a
+   charcoal (never pure-black) foreground; night optic sits on a
+   warm charcoal room (never pitch black) with a gentle off-white.
+   Accent shifts from harsh racing-orange to vermilion (day) and
+   soft tangerine (night) — both ≥ 4.5:1 on their surface.
+   ============================================================ */
+:root {
+  --paper: #f4f2ec;
+  --paper-rgb: 244 242 236;
+  --paper-dim: #eae7df;
+  --ink: #2a2723;
+  --ink-rgb: 42 39 35;
+  --ink-soft: #3d3933;
+  --acc: #dd5223;
+  --acc-rgb: 221 82 35;
+  --line: rgb(42 39 35 / 0.14);
+  --line-inv: rgb(244 242 236 / 0.18);
+  --noise-blend: multiply;
+  --noise-opacity: 0.045;
+}
+
+html.dark {
+  --paper: #22201c;
+  --paper-rgb: 34 32 28;
+  --paper-dim: #2b2924;
+  --ink: #e7e3d9;
+  --ink-rgb: 231 227 217;
+  --ink-soft: #cac5b8;
+  --acc: #ff8a4d;
+  --acc-rgb: 255 138 77;
+  --line: rgb(231 227 217 / 0.18);
+  --line-inv: rgb(34 32 28 / 0.16);
+  --noise-blend: screen;
+  --noise-opacity: 0.05;
+}
+
+/* ============================================================
+   READABILITY FLOOR — applies to both optics.
+   Micro labels below ~10.5px are not legible in Helvetica, and
+   /35–/45 muted tiers fall under 3:1 contrast. Rather than
+   scattering magic numbers, every arbitrary size + muted tier is
+   re-floored here from a single source (utilities don't use
+   !important, so these win). Ordered small → large.
+   ============================================================ */
+[class*="text-[8px]"],
+[class*="text-[8.5px]"],
+[class*="text-[9px]"] {
+  font-size: 10.5px !important;
+}
+[class*="text-[9.5px]"],
+[class*="text-[10px]"] {
+  font-size: 11px !important;
+}
+[class*="text-[10.5px]"],
+[class*="text-[11px]"] {
+  font-size: 12px !important;
+}
+[class*="text-[12px]"] {
+  font-size: 12.5px !important;
+}
+[class*="text-[13px]"] {
+  font-size: 13.5px !important;
+}
+
+/* muted-text contrast floor (theme-aware — remixes the live var) */
+[class*="text-ink/35"] {
+  color: color-mix(in oklab, var(--ink) 55%, transparent) !important;
+}
+[class*="text-ink/40"],
+[class*="text-ink/45"] {
+  color: color-mix(in oklab, var(--ink) 62%, transparent) !important;
+}
+[class*="text-ink/50"],
+[class*="text-ink/55"] {
+  color: color-mix(in oklab, var(--ink) 72%, transparent) !important;
+}
+[class*="text-ink/60"],
+[class*="text-ink/70"] {
+  color: color-mix(in oklab, var(--ink) 80%, transparent) !important;
+}
+[class*="text-paper/40"],
+[class*="text-paper/45"] {
+  color: color-mix(in oklab, var(--paper) 62%, transparent) !important;
+}
+[class*="text-paper/50"],
+[class*="text-paper/55"] {
+  color: color-mix(in oklab, var(--paper) 72%, transparent) !important;
+}
+[class*="text-paper/60"] {
+  color: color-mix(in oklab, var(--paper) 78%, transparent) !important;
+}
+
+/* ============================================================
+   WEIGHT CLAMP — Helvetica Regular (400) + Bold (700) only.
+   Any heavier/lighter utility that slips in is forced onto the
+   nearest allowed weight, matching the readability-floor policy.
+   ============================================================ */
+.font-black,
+.font-extrabold,
+.font-semibold {
+  font-weight: 700 !important;
+}
+.font-medium,
+.font-light,
+.font-thin {
+  font-weight: 400 !important;
+}
+
+/* ============================================================
+   LABEL LAYER = BOLD — every tracked technical label (spec keys
+   like ROLE / FOCUS, DEPLOYING::, chips, tags, captions, nav
+   links, marquees, HUD readouts, strip texts) renders at 700.
+   Prose (.copy / .copy-sm) has no tracking class and stays at
+   400 — that is the whole hierarchy contract. Custom CSS lives
+   after the Tailwind import, so this beats utility classes.
+   ============================================================ */
+[class*="tracking-[0."] {
+  font-weight: 700;
+}
+
+/* ============================================================
+   FIRMWARE SURFACES — the boot sequence and the nav module are
+   "hardware terminals": they stay dark in BOTH optics instead of
+   flipping with the theme (a light boot flash in night mode reads
+   as a theming bug). Content panels still follow the theme.
+   ============================================================ */
+.term {
+  --paper: #f1efe8;
+  --paper-rgb: 241 239 232;
+  --ink: #211f1b;
+  --ink-rgb: 33 31 27;
+  --ink-soft: #b9b4a6;
+  --acc: #ff8a4d;
+  --acc-rgb: 255 138 77;
+  --line-inv: rgb(241 239 232 / 0.2);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-acc: var(--acc);
+  --color-line: var(--line);
+  --color-line-inv: var(--line-inv);
+
+  /* every piece of typography on the site is system Helvetica */
+  --font-display: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+  --font-mono: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+
+  --animate-marquee: marquee 24s linear infinite;
+  --animate-marquee-slow: marquee 44s linear infinite;
+  --animate-blink: blink 1.1s steps(1) infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+}
+
+@theme {
+  /* plotting surfaces only — ASCII art characters are coordinates on a
+     fixed grid and must align; these stay OS-monospace, no download */
+  --font-ascii: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+/* smooth cross-fade only during an explicit optic switch */
+html.theme-x,
+html.theme-x *,
+html.theme-x *::before,
+html.theme-x *::after {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* rainbow easter egg — animates the accent token (Chromium+) */
+@property --acc {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dd5223;
+}
+html.rainbow {
+  animation: acc-rainbow 6s linear infinite;
+}
+@keyframes acc-rainbow {
+  0%   { --acc: #f06428; }
+  20%  { --acc: #f5b915; }
+  40%  { --acc: #3ecf6a; }
+  60%  { --acc: #2db3f0; }
+  80%  { --acc: #a86df5; }
+  100% { --acc: #f06428; }
+}
+
+/* ---------- base ---------- */
+html {
+  background: var(--ink);
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+::selection {
+  background: var(--acc);
+  color: var(--paper);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border: 2px solid var(--paper);
+}
+
+/* hide native cursor when custom cursor active on fine pointers */
+html.kursor,
+html.kursor * {
+  cursor: none !important;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 1px dashed var(--acc);
+  outline-offset: 3px;
+}
+
+/* ---------- display type helpers ----------
+   Helvetica has no width axis, so the "condensed" voices are emulated
+   with tightened tracking + full black weight — robust on every OS. */
+.cond {
+  letter-spacing: -0.03em;
+}
+.xcond {
+  letter-spacing: -0.045em;
+}
+.wide {
+  letter-spacing: 0.04em;
+}
+.stroke-ink {
+  -webkit-text-stroke: 1.5px var(--ink);
+  color: transparent;
+}
+.stroke-paper {
+  -webkit-text-stroke: 1.5px var(--paper);
+  color: transparent;
+}
+.stroke-acc {
+  -webkit-text-stroke: 1.5px var(--acc);
+  color: transparent;
+}
+@media (max-width: 768px) {
+  .stroke-ink, .stroke-paper, .stroke-acc {
+    -webkit-text-stroke-width: 1px;
+  }
+}
+
+/* ---------- keyframes ---------- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  41% { opacity: 1; }
+  42% { opacity: 0.55; }
+  43% { opacity: 1; }
+  78% { opacity: 1; }
+  79% { opacity: 0.4; }
+  80% { opacity: 1; }
+}
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes dash-flow {
+  to { stroke-dashoffset: -24; }
+}
+
+/* ---------- textures ---------- */
+.noise-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: var(--noise-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+.blueprint {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.blueprint-inv {
+  background-image:
+    linear-gradient(var(--line-inv) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-inv) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgb(var(--paper-rgb) / 0.035) 3px,
+    rgb(var(--paper-rgb) / 0.035) 4px
+  );
+}
+.scanlines-dark::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgb(var(--ink-rgb) / 0.04) 3px,
+    rgb(var(--ink-rgb) / 0.04) 4px
+  );
+}
+.scan-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 26%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--paper-rgb) / 0.05),
+    transparent
+  );
+  animation: scanline 7s linear infinite;
+  pointer-events: none;
+}
+
+/* crosshair plus marker */
+.plus {
+  position: relative;
+  width: 9px;
+  height: 9px;
+}
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.plus::before {
+  left: 4px;
+  top: 0;
+  width: 1px;
+  height: 9px;
+}
+.plus::after {
+  top: 4px;
+  left: 0;
+  height: 1px;
+  width: 9px;
+}
+
+/* ---------- reveal ---------- */
+.rv {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--rvd, 0ms);
+  will-change: opacity, transform;
+}
+.rv.on {
+  opacity: 1;
+  transform: none;
+}
+.rv-clip {
+  clip-path: inset(0 0 100% 0);
+  transform: none;
+  transition: clip-path 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--rvd, 0ms);
+}
+.rv-clip.on {
+  clip-path: inset(0 0 0% 0);
+}
+
+/* ---------- body copy ----------
+   Prose gets a real reading scale — 14→15px with breathable
+   leading and pretty ragging. Labels keep the micro system. */
+.copy {
+  font-size: 14px;
+  line-height: 1.85;
+  letter-spacing: 0.005em;
+  text-wrap: pretty;
+}
+.copy-sm {
+  font-size: 13px;
+  line-height: 1.8;
+  letter-spacing: 0.005em;
+  text-wrap: pretty;
+}
+@media (min-width: 768px) {
+  .copy {
+    font-size: 15px;
+  }
+  .copy-sm {
+    font-size: 13.5px;
+  }
+}
+
+/* ---------- misc ---------- */
+.link-u {
+  position: relative;
+}
+.link-u::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-u:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.tabular {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+.flicker {
+  animation: flicker 5s linear infinite;
+}
+.pixelated {
+  image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .rv, .rv-clip {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
