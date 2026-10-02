@@ -39,21 +39,20 @@ export default function Hero({ ready }: { ready: boolean }) {
             <div className="plus text-ink/25" />
           </div>
 
-          <Reveal clip delay={ready ? 100 : 800}>
-            <h1 className="xcond font-display text-[clamp(3.4rem,12vw,10.5rem)] font-bold leading-[0.84] tracking-[-0.015em]">
-              KIARASH
-            </h1>
-          </Reveal>
-          <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
-            <Reveal clip delay={ready ? 220 : 920}>
-              <h1 className="xcond font-display text-[clamp(3.4rem,12vw,10.5rem)] font-bold leading-[0.84] tracking-[-0.015em]">
+          {/* h1 split across two clipped reveals — valid: Reveal renders inline spans, not block divs */}
+          <h1 className="xcond font-display text-[clamp(3.4rem,12vw,10.5rem)] font-bold leading-[0.84] tracking-[-0.015em]">
+            <Reveal as="span" clip delay={ready ? 100 : 800}>
+              <span className="block">KIARASH</span>
+            </Reveal>
+            <Reveal as="span" clip delay={ready ? 220 : 920}>
+              <span className="block">
                 AKBARI
                 <span className="ml-3 align-top font-mono text-sm font-normal tracking-normal text-acc">
                   [v5.2]
                 </span>
-              </h1>
+              </span>
             </Reveal>
-          </div>
+          </h1>
 
           <Reveal clip delay={ready ? 340 : 1040}>
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">

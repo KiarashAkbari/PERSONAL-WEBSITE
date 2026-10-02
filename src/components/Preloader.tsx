@@ -87,13 +87,20 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
   return (
     <div
       onClick={finish}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+          e.preventDefault();
+          finish();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Loading dossier — press Enter or Space to skip"
       className={cn(
         /* term = fixed firmware palette — always a dark terminal, both optics */
-        "term fixed inset-0 z-[100] flex flex-col bg-ink text-paper transition-transform duration-[620ms] ease-[cubic-bezier(.76,0,.24,1)]",
+        "term fixed inset-0 z-[100] flex flex-col bg-ink text-paper transition-transform duration-[620ms] ease-[cubic-bezier(.76,0,.24,1)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-acc focus-visible:outline-offset-2",
         gone ? "-translate-y-full" : "translate-y-0"
       )}
-      role="status"
-      aria-label="Loading dossier"
     >
       <div className="blueprint-inv flex flex-1 flex-col items-start justify-center px-6 md:px-16">
         {/* ASCII logo — character decode on tick */}

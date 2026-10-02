@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -7,9 +8,28 @@ export default function Cursor() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (!window.matchMedia("(pointer:fine)").matches) return;
+    let fine = false;
+    const reduced = prefersReducedMotionSync();
+    try {
+      fine = window.matchMedia("(pointer:fine)").matches;
+    } catch {
+      return;
+    }
+    if (!fine || reduced) return;
     setEnabled(true);
     document.documentElement.classList.add("kursor");
+
+    // restore native cursor when user switches to keyboard nav
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        document.documentElement.classList.add("kursor-allow");
+        document.documentElement.classList.remove("kursor");
+      }
+    };
+    const onMouseMoveOnce = () => {
+      document.documentElement.classList.remove("kursor-allow");
+      document.documentElement.classList.add("kursor");
+    };
 
     const pos = { x: -100, y: -100 };
     const cur = { x: -100, y: -100 };
@@ -65,12 +85,17 @@ export default function Cursor() {
     raf = requestAnimationFrame(loop);
 
     window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
+    // single-shot restore on next mouse movement after Tab
+    const restoreOnce = () => onMouseMoveOnce();
+    window.addEventListener("mousemove", restoreOnce, { once: true, passive: true } as AddEventListenerOptions);
     document.documentElement.addEventListener("mouseleave", onLeave);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("keydown", onKeyDown);
       document.documentElement.removeEventListener("mouseleave", onLeave);
-      document.documentElement.classList.remove("kursor");
+      document.documentElement.classList.remove("kursor", "kursor-allow");
     };
   }, []);
 

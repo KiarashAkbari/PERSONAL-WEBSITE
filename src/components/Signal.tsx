@@ -56,17 +56,17 @@ export default function Signal() {
       />
 
       <div className="px-4 py-12 md:px-6 md:py-16">
-        <Reveal clip>
-          <h3 className="xcond font-display text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[0.88]">
-            GOT A PROBLEM
-          </h3>
-        </Reveal>
-        <Reveal clip delay={120}>
-          <h3 className="xcond font-display text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[0.88]">
-            <span className="stroke-ink">THAT NEEDS</span>{" "}
-            <span className="text-acc">EYES?</span>
-          </h3>
-        </Reveal>
+        <h2 className="xcond font-display text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[0.88]">
+          <Reveal clip as="span">
+            <span className="block">GOT A PROBLEM</span>
+          </Reveal>
+          <Reveal clip as="span" delay={120}>
+            <span className="block">
+              <span className="stroke-ink">THAT NEEDS</span>{" "}
+              <span className="text-acc">EYES?</span>
+            </span>
+          </Reveal>
+        </h2>
         <Reveal delay={220}>
           <p className="copy mt-6 max-w-md text-ink/75">
             Open to remote AI software engineering roles and collaborations.
@@ -77,23 +77,25 @@ export default function Signal() {
       </div>
 
       {/* channel cards — gap-px over bg-line draws perfect hairline seams in every grid shape */}
-      <div className="grid gap-px border-t border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      <address className="grid gap-px border-t border-line bg-line not-italic sm:grid-cols-2 lg:grid-cols-4">
         {CHANNELS.map((c, i) => (
           <Reveal key={c.id} delay={i * 80} className="bg-paper">
             <a
               href={c.href}
               target={c.href.startsWith("http") ? "_blank" : undefined}
-              rel={c.href.startsWith("http") ? "noreferrer" : undefined}
+              rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              aria-label={`${c.title}: ${c.value} — ${c.note}`}
               data-cursor={c.cursor}
               className="group flex h-full flex-col justify-between gap-8 px-4 py-6 transition-colors duration-300 hover:bg-ink hover:text-paper md:px-6 lg:py-8"
             >
               <div className="flex items-center justify-between text-[10px] tracking-[0.3em] text-ink/50 group-hover:text-paper/50">
                 <span className="flex items-center gap-2">
-                  <c.icon size={13} className="text-acc" />
+                  <c.icon size={13} className="text-acc" aria-hidden />
                   {c.title}
                 </span>
                 <ArrowUpRight
                   size={14}
+                  aria-hidden
                   className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-acc"
                 />
               </div>
@@ -108,7 +110,7 @@ export default function Signal() {
             </a>
           </Reveal>
         ))}
-      </div>
+      </address>
 
       {/* bottom bar */}
       <footer className="border-t border-line">

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 import { cn } from "../utils/cn";
 
 const RAMP = " .·:;=+*#%@";
@@ -16,11 +17,13 @@ export default function AsciiImage({
   src,
   caption,
   cols = 72,
+  eager,
   className,
 }: {
   src: string;
   caption?: string;
   cols?: number;
+  eager?: boolean;
   className?: string;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -79,7 +82,7 @@ export default function AsciiImage({
   useEffect(() => {
     const el = rootRef.current;
     if (!el || !base) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotionSync();
     if (reduce) {
       setShown(base);
       return;
@@ -169,7 +172,9 @@ export default function AsciiImage({
           src={src}
           alt={caption ?? "capture"}
           crossOrigin="anonymous"
-          loading="lazy"
+          loading={eager ? "eager" : "lazy"}
+          fetchPriority={eager ? "high" : "auto"}
+          decoding={eager ? "sync" : "async"}
           className={cn(
             "pixelated absolute inset-0 h-full w-full object-cover transition-opacity duration-150",
             hover || err ? "opacity-100" : "opacity-0"

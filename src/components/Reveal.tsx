@@ -6,14 +6,21 @@ type Props = {
   className?: string;
   delay?: number;
   clip?: boolean;
+  as?: "div" | "span";
 };
 
-export default function Reveal({ children, className, delay = 0, clip = false }: Props) {
+export default function Reveal({ children, className, delay = 0, clip = false, as = "div" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const Tag = as as unknown as "div";
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // if JS fails or IO unsupported, ensure content visible (progressive enhancement)
+    if (typeof IntersectionObserver === "undefined") {
+      el.classList.add("on");
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -30,12 +37,12 @@ export default function Reveal({ children, className, delay = 0, clip = false }:
   }, []);
 
   return (
-    <div
+    <Tag
       ref={ref}
       className={cn(clip ? "rv-clip" : "rv", className)}
       style={{ "--rvd": `${delay}ms` } as CSSProperties}
     >
       {children}
-    </div>
+    </Tag>
   );
 }

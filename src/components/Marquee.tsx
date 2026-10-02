@@ -22,6 +22,7 @@ export default function Marquee({ items, inverted, slow, className, label }: Pro
 
   return (
     <div
+      aria-label={label ?? "Ticker"}
       className={cn(
         "relative flex items-center overflow-hidden border-y py-3",
         inverted ? "border-line-inv bg-ink text-paper" : "border-line bg-paper text-ink",
@@ -33,7 +34,12 @@ export default function Marquee({ items, inverted, slow, className, label }: Pro
           {label}
         </span>
       )}
-      <div className={cn("flex w-max", slow ? "animate-marquee-slow" : "animate-marquee")}>
+      <div
+        className={cn(
+          "marquee-track flex w-max",
+          slow ? "animate-marquee-slow" : "animate-marquee"
+        )}
+      >
         {row(false)}
         {row(true)}
       </div>

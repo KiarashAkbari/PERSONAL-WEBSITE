@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { readPalette, useTheme } from "../theme/ThemeProvider";
+import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 import { cn } from "../utils/cn";
 
 const RAMP = " .·:;=+*#%@";
@@ -34,7 +35,7 @@ export default function AsciiWave({ className }: { className?: string }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotionSync();
 
     let W = 0;
     let H = 0;

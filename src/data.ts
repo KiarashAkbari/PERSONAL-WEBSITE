@@ -19,8 +19,11 @@ export type Project = {
   private?: boolean;
 };
 
+import { SITE_URL_WITH_SLASH } from "./constants/site";
+
 export const GH = "https://github.com/KiarashAkbari";
-export const SITE = "https://kiarash-akbari.netlify.app/";
+/** canonical site URL — single source of truth lives in src/constants/site.ts */
+export const SITE = SITE_URL_WITH_SLASH;
 
 /* resume.pdf — verified contact channels */
 export const CONTACT = {

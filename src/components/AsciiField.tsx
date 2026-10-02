@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { readPalette, useTheme } from "../theme/ThemeProvider";
+import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 import { cn } from "../utils/cn";
 
 const RAMP = " .·:;=+*#%@";
@@ -117,7 +118,7 @@ export default function AsciiField({ className }: { className?: string }) {
     let raf = 0;
     let last = 0;
     let spin = 0.6;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotionSync();
 
     palRef.current = readPalette();
     let lastPal = 0;

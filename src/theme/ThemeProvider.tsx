@@ -71,8 +71,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 
   const toggle = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
+    setThemeState((prev) => {
+      const next: Theme = prev === "dark" ? "light" : "dark";
+      flashTransitions();
+      try {
+        localStorage.setItem(STORAGE_KEY, next);
+      } catch {}
+      return next;
+    });
+  }, [flashTransitions]);
 
   const toggleRainbow = useCallback(() => {
     setRainbow((r) => {

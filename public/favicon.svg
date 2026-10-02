@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" fill="#2a2723"/>
+  <rect x="10" y="10" width="12" height="12" fill="#dd5223"/>
+  <text x="16" y="20" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#f4f2ec">KIA</text>
+</svg>

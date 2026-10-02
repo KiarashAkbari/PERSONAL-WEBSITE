@@ -53,15 +53,17 @@ function Item({
         onClick={onToggle}
         data-cursor={open ? "CLOSE" : "OPEN"}
         aria-expanded={open}
+        aria-controls={`work-panel-${p.id}`}
         className={cn(
           "group flex w-full items-center gap-3 px-4 py-5 text-left transition-colors duration-300 md:gap-5 md:px-6",
           open ? "bg-ink text-paper" : "bg-paper hover:bg-ink/[0.045]"
         )}
       >
-        <span className="w-8 shrink-0 font-mono text-[10px] tracking-[0.3em] text-acc">
+        <span className="w-8 shrink-0 font-mono text-[10px] tracking-[0.3em] text-acc" aria-hidden>
           {p.index}
         </span>
         <span className="min-w-0 flex-1">
+          {/* h3 inside <button> is invalid HTML — use accessible spans with heading role via aria */}
           <span className="cond block truncate font-display text-[clamp(1.4rem,4vw,2.9rem)] font-bold leading-[0.95]">
             {p.title}
             <span
@@ -69,6 +71,7 @@ function Item({
                 "ml-3 align-middle font-mono text-[9px] font-normal tracking-[0.25em]",
                 open ? "text-paper/40" : "text-ink/35"
               )}
+              aria-hidden
             >
               .EXE
             </span>
@@ -102,6 +105,7 @@ function Item({
       </button>
 
       <div
+        id={`work-panel-${p.id}`}
         className={cn(
           "grid transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)]",
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
@@ -160,20 +164,22 @@ function Item({
                   <a
                     href={p.repo}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     data-cursor="REPO"
+                    aria-label={`Open ${p.title} repository on GitHub`}
                     className="group inline-flex items-center gap-2 border border-ink bg-ink px-5 py-3 text-[10px] font-bold tracking-[0.18em] text-paper transition-colors hover:border-acc hover:bg-acc hover:text-ink"
                   >
                     OPEN_REPO
                     <ArrowUpRight
                       size={13}
+                      aria-hidden
                       className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     />
                   </a>
                 )}
                 {p.private && (
                   <span className="inline-flex items-center gap-2 border border-acc px-5 py-3 text-[10px] font-bold tracking-[0.12em] text-acc">
-                    <Lock size={12} />
+                    <Lock size={12} aria-hidden />
                     PRIVATE_TEAM_REPO — CODEBASE ON REQUEST
                   </span>
                 )}
@@ -181,12 +187,13 @@ function Item({
                   <a
                     href={p.live}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     data-cursor="LIVE"
+                    aria-label={`Open ${p.title} live site`}
                     className="inline-flex items-center gap-2 border border-ink px-5 py-3 text-[10px] font-bold tracking-[0.18em] text-ink transition-colors hover:bg-ink hover:text-paper"
                   >
                     LIVE_SITE
-                    <ArrowUpRight size={13} />
+                    <ArrowUpRight size={13} aria-hidden />
                   </a>
                 )}
                 <span className="font-mono text-[9px] tracking-[0.25em] text-ink/40">
@@ -199,7 +206,7 @@ function Item({
             <div className="md:col-span-5">
               {p.img ? (
                 <>
-                  <AsciiImage src={p.img} caption={`FIG.${p.index}A — ${p.fig}`} />
+                  <AsciiImage src={p.img} caption={`FIG.${p.index}A — ${p.fig}`} eager={p.index === "03"} />
                   <p className="mt-2 font-mono text-[9px] leading-relaxed tracking-[0.08em] text-ink/40">
                     HOVER TO SWITCH OPTICS <span className="text-acc">⇆</span> ASCII ↔
                     RAW_CAPTURE

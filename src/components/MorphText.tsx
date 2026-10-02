@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 import { cn } from "../utils/cn";
 
 const GLYPHS = "█▓▒░<>/\\|=+*#·:;";
@@ -28,7 +29,7 @@ export default function MorphText({
 
   useEffect(() => {
     if (phrases.length < 2) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotionSync();
 
     const runMorph = () => {
       const from = phrases[idx.current];

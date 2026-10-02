@@ -228,10 +228,40 @@ body {
   border: 2px solid var(--paper);
 }
 
-/* hide native cursor when custom cursor active on fine pointers */
-html.kursor,
-html.kursor * {
+/* skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* hide native cursor when custom cursor active — fine-pointer only, never when keyboard nav */
+html.kursor {
+  cursor: none;
+}
+html.kursor a,
+html.kursor button,
+html.kursor [data-cursor] {
   cursor: none !important;
+}
+html.kursor-allow,
+html.kursor-allow * {
+  cursor: auto !important;
+}
+
+/* marquee pause on hover/focus */
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
 }
 
 a,
