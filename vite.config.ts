@@ -16,4 +16,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    host: "0.0.0.0",
+    // Opt-in extra dev hosts, comma-separated (e.g. VITE_DEV_ALLOWED_HOSTS=.example.app).
+    // Empty by default so the dev server keeps Vite's strict host checking.
+    allowedHosts: (process.env.VITE_DEV_ALLOWED_HOSTS ?? "").split(",").filter(Boolean),
+  },
 });

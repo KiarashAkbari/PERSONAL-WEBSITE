@@ -17,7 +17,10 @@ export default function WaveBand() {
         <span className="text-acc">DISTURB_WITH_POINTER ▚</span>
       </div>
 
-      <Reveal clip>
+      {/* plain fade reveal, not `clip`: a clip-path over a live canvas whose
+          own IntersectionObserver gates the render loop can strand it shut.
+          Matches every other section on the page. */}
+      <Reveal>
         <div className="blueprint relative h-[46vh] min-h-[320px] md:h-[54vh]">
           <AsciiWave className="absolute inset-0" />
           <div className="plus absolute left-3 top-3 text-ink/30" />

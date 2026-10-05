@@ -110,8 +110,10 @@ export default function AsciiWave({ className }: { className?: string }) {
     wrap.addEventListener("pointermove", onMove, { passive: true });
     wrap.addEventListener("pointerdown", onDown, { passive: true });
 
+    // threshold 0, not 0.02: a clipping ancestor or a partially-entered band
+    // can sit below 2% for a long time and leave the field frozen.
     const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), {
-      threshold: 0.02,
+      threshold: 0,
     });
     io.observe(wrap);
 

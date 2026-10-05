@@ -11,7 +11,9 @@ Personal portfolio website of **Kiarash Akbari** — AI software engineering, ma
 
 - Vite + TypeScript
 - Static build, deployed to GitHub Pages via GitHub Actions
-- Custom domain configured through `CNAME`
+- Served from the default Pages URL: <https://kiarashakbari.github.io/PERSONAL-WEBSITE/>
+
+> No custom domain is configured — there is no `CNAME` file, so do not add one. A `CNAME` may only contain a bare custom domain, so adding a placeholder here would break the deploy.
 
 ## Featured projects
 
