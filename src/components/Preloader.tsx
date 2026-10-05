@@ -16,7 +16,7 @@ const LOGS = [
   "> MOUNT /dev/ink .................. [OK]",
   "> LOAD MODULE ascii.core .......... [LINKED]",
   "> LOAD MODULE rag.pipeline ........ [LINKED]",
-  "> LOAD SECTION resume.pdf ......... [IMPORTED]",
+  "> LOAD SECTION data.ts ............ [IMPORTED]",
   "> CALIBRATE anomaly.threshold ..... σ3.2",
   "> AUTH KIARASH_AKBARI ............. [VERIFIED]",
 ];
