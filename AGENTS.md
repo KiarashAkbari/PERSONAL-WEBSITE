@@ -5,7 +5,7 @@
 ## 1. Project Overview
 
 - **What:** Personal dossier / portfolio for **Kiarash Akbari — AI Software Engineer** (backend & AI-integrated systems). Brutalist "personnel dossier" aesthetic: blueprint grids, scanlines, ASCII physics, dot-matrix decodes.
-- **Domain:** `kiarash-akbari.com` (CNAME). Data canon lives in `src/data.ts` + `resume.pdf`.
+- **Domain:** deployed to GitHub Pages at `https://kiarashakbari.github.io/PERSONAL-WEBSITE/`. No custom domain and **no `CNAME` file** — do not add one unless a real domain is purchased and its DNS points at GitHub (a `CNAME` holding anything other than a bare custom domain breaks the deploy). Data canon lives in `src/data.ts` + `resume.pdf`.
 - **Route model:** Single-page app with hash anchors: `#hero` → `#work` → `#log` → `#profile` → `#signal`. No router.
 - **Content rule:** Copy is verified against `resume.pdf` and live GitHub builds. Do not invent skills, dates, or org names.
 
@@ -14,22 +14,24 @@
 - **Build:** Vite 7 + `@vitejs/plugin-react` 5.1 + `@tailwindcss/vite` 4.1 + `vite-plugin-singlefile` 2.3 (inlines build to single HTML).
 - **Runtime:** React 19.2 + React-DOM 19.2, TypeScript 5.9 (`strict`), Tailwind 4.1, `lenis` 1.3 (smooth scroll), `lucide-react` 1.44, `clsx` 2.1 + `tailwind-merge` 3.4 (`src/utils/cn.ts`).
 - **Path alias:** `@/*` → `src/*` (see `tsconfig.json` + `vite.config.ts` `resolve.alias`).
-- **Scripts:** `dev` / `build` / `preview` only (no lint/test/CI yet). `type-check` will be added.
+- **Scripts:** `dev` / `build` / `preview` / `type-check`. No lint or test runner yet. CI exists: `.github/workflows/deploy.yml` runs `npm ci` → `npm run build` → publishes `dist/` to GitHub Pages on every push to `main`. Note `build` already gates on `tsc --noEmit`.
 - **Constraints:** Do not add dependencies or build tools without asking. Keep `viteSingleFile()` behavior unless user requests split chunks.
 
 ## 3. Repository Layout
 
 ```
 index.html          # head meta, anti-FOUC theme bootstrap, dark-extension guard
-CNAME               # kiarash-akbari.com
-public/             # static assets (robots.txt, sitemap.xml, favicon)
+.github/workflows/deploy.yml  # CI: npm ci → build → deploy to GitHub Pages (on push to main)
+public/             # static assets (robots.txt, sitemap.xml, favicon.svg, og.svg)
 src/
   App.tsx           # page composition + FrameTicks + scroll lifecycle
   main.tsx          # React root
   index.css         # theme tokens + utilities + keyframes + textures
   data.ts           # GH/SITE/CONTACT/PROJECTS/CAPABILITIES/EXPERIENCE/EDUCATION/TIMELINE/NAV_LINKS
+  constants/site.ts # SITE_URL / SITE_URL_WITH_SLASH / OG_IMAGE / DOC_VERSION / EST_YEAR — canonical-URL source of truth
   theme/ThemeProvider.tsx  # light/dark + rainbow, localStorage kia-theme, [D] toggle
   lib/scroll.ts     # lenis wrapper: init/stop/start/scrollToId/scrollTop
+  hooks/usePrefersReducedMotion.ts  # reactive hook + prefersReducedMotionSync() for non-React callers
   utils/cn.ts       # twMerge(clsx(...))
   components/
     Preloader.tsx   # boot sequence (term palette, scramble decode)
@@ -67,7 +69,17 @@ npm run preview  # preview dist
 npx tsc --noEmit # type-check
 ```
 
-Canonical is `https://kiarash-akbari.com` (CNAME). `src/data.ts` `SITE` must align with it. SEO head is in `index.html`; runtime `theme-color` sync is in `ThemeProvider.tsx`.
+Canonical is `https://kiarashakbari.github.io/PERSONAL-WEBSITE/` (GitHub Pages project site, no custom domain).
+
+**Changing the site URL — update all six places or SEO silently rots:**
+1. `src/constants/site.ts` → `SITE_URL` (no trailing slash; feeds `SITE_URL_WITH_SLASH` + `OG_IMAGE`, and `src/data.ts` `SITE`)
+2. `index.html` → `rel="canonical"`, `og:url`, `og:image`, `twitter:image`, JSON-LD `url`
+3. `public/robots.txt` → `Sitemap:`
+4. `public/sitemap.xml` → `<loc>` (and bump `<lastmod>`)
+5. `public/og.svg` → the `01 // DOSSIER — …` watermark text
+6. this file (§1 Domain + this section)
+
+`viteSingleFile()` inlines all JS/CSS and emits the favicon as relative `./favicon.svg`, so the build has **zero** absolute `/asset` paths and needs no Vite `base` to work from a project subpath. SEO head is in `index.html`; runtime `theme-color` sync is in `ThemeProvider.tsx`.
 
 ## 6. Design Language
 
