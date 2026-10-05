@@ -5,9 +5,9 @@
 ## 1. Project Overview
 
 - **What:** Personal dossier / portfolio for **Kiarash Akbari — AI Software Engineer** (backend & AI-integrated systems). Brutalist "personnel dossier" aesthetic: blueprint grids, scanlines, ASCII physics, dot-matrix decodes.
-- **Domain:** deployed to GitHub Pages at `https://kiarashakbari.github.io/PERSONAL-WEBSITE/`. No custom domain and **no `CNAME` file** — do not add one unless a real domain is purchased and its DNS points at GitHub (a `CNAME` holding anything other than a bare custom domain breaks the deploy). Data canon lives in `src/data.ts` + `resume.pdf`.
+- **Domain:** deployed to GitHub Pages at `https://kiarashakbari.github.io/PERSONAL-WEBSITE/`. No custom domain and **no `CNAME` file** — do not add one unless a real domain is purchased and its DNS points at GitHub (a `CNAME` holding anything other than a bare custom domain breaks the deploy). Data canon lives in `src/data.ts`; there is **no `resume.pdf` in this repo** (never committed — see §1 Content rule).
 - **Route model:** Single-page app with hash anchors: `#hero` → `#work` → `#log` → `#profile` → `#signal`. No router.
-- **Content rule:** Copy is verified against `resume.pdf` and live GitHub builds. Do not invent skills, dates, or org names.
+- **Content rule:** `src/data.ts` is the single source of truth for all bio copy — it is **not** backed by a committed résumé (`resume.pdf` does not exist here and has never appeared in git history). Do not invent skills, dates, or org names; when a fact is not already in `data.ts`, ask rather than fabricate. `src/constants/site.ts` is the source of truth for URLs/versioning.
 
 ## 2. Stack & Tooling
 
@@ -27,7 +27,8 @@ src/
   App.tsx           # page composition + FrameTicks + scroll lifecycle
   main.tsx          # React root
   index.css         # theme tokens + utilities + keyframes + textures
-  data.ts           # GH/SITE/CONTACT/PROJECTS/CAPABILITIES/EXPERIENCE/EDUCATION/TIMELINE/NAV_LINKS
+  data.ts           # GH/SITE/CONTACT/PROJECTS/TICKER_ITEMS/CAPABILITIES/EXPERIENCE/EDUCATION/TIMELINE/NAV_LINKS
+                    #   + exported types Project / Experience (§4) — SITE is derived from constants/site.ts
   constants/site.ts # SITE_URL / SITE_URL_WITH_SLASH / OG_IMAGE / DOC_VERSION / EST_YEAR — canonical-URL source of truth
   theme/ThemeProvider.tsx  # light/dark + rainbow, localStorage kia-theme, [D] toggle
   lib/scroll.ts     # lenis wrapper: init/stop/start/scrollToId/scrollTop
@@ -56,17 +57,19 @@ tsconfig.json
 - **Styling:** Tailwind via `@import "tailwindcss"` + semantic CSS vars. No new color literals — reuse vars. `cn()` for merges.
 - **Types:** Keep `Project`, `Experience` types in `data.ts`. No `any`. Respect `strict` flags.
 - **Accessibility:** Prefer semantic HTML (`section`, `h2/h3`, `address`, `dl`). Maintain keyboard paths for all interactive surfaces.
-- **Motion:** Respect `prefers-reduced-motion` for canvas + scroll; keep `Reveal` IO pattern (threshold 0.1, rootMargin -6%).
+- **Motion:** Respect `prefers-reduced-motion` for canvas + scroll; keep `Reveal` IO pattern (`threshold: 0`, `rootMargin "0px 0px -6% 0px"`, plus the synchronous on-screen first pass). Do **not** raise the threshold above 0 — `as="span"` reveals have a zero-area box that reports ratio 0 and would never fire, stranding the content invisible.
+- **Reveal is JS-gated:** `.rv` / `.rv-clip` start invisible and only become visible when JS adds `.on`. The `@media (prefers-reduced-motion: reduce)` block (`index.css:496`) is the **only** path that forces them visible without JS — so a device with Reduce Motion on (very common on iOS) will look fine while a desktop without it shows nothing if the observer never fires. When content is "missing on desktop but fine on mobile", check `Reveal` first.
 - **No large rewrites:** Small, separate diffs. Do not delete files. Do not reshape layout/content/colors/fonts unless asked.
-- **Verification:** After changes run `npm run build` and `npx tsc --noEmit`. Do not commit or push; report diff summary.
+- **Verification:** After changes run `npm run type-check` and `npm run build`. (`build` = `tsc --noEmit && vite build`, so it re-runs the type gate itself; prefer the npm scripts over bare `npx tsc`.) No lint or test runner exists yet — do not invent one without asking. Do not commit or push; report diff summary.
 
 ## 5. Build & Development
 
 ```bash
+npm ci           # first-time setup — package-lock.json is committed and CI uses npm ci
 npm run dev      # vite dev
-npm run build    # vite build (singlefile)
+npm run build    # tsc --noEmit && vite build (singlefile)
 npm run preview  # preview dist
-npx tsc --noEmit # type-check
+npm run type-check # tsc --noEmit
 ```
 
 Canonical is `https://kiarashakbari.github.io/PERSONAL-WEBSITE/` (GitHub Pages project site, no custom domain).
