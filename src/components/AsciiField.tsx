@@ -166,15 +166,13 @@ export default function AsciiField({ className }: { className?: string }) {
     wrap.addEventListener("pointerleave", onLeave, { passive: true });
     wrap.addEventListener("pointerdown", onDown, { passive: true });
 
-    const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), {
-      threshold: 0.02,
-    });
-    io.observe(wrap);
-
     const render = (now: number) => {
+      if (!running || !inView) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(render);
-      if (!running || !inView) return;
-      if (now - last < 33) return; // ~30fps like the spec
+      if (now - last < 33) return; // ~30fps while visible
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const t = now / 1000;
@@ -316,6 +314,24 @@ export default function AsciiField({ className }: { className?: string }) {
       }
       ctx.globalAlpha = 1;
     };
+
+    // Stop the render loop off-screen and resume it on re-entry.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) {
+          if (!raf) {
+            last = 0;
+            raf = requestAnimationFrame(render);
+          }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(wrap);
     raf = requestAnimationFrame(render);
 
     return () => {
@@ -336,7 +352,7 @@ export default function AsciiField({ className }: { className?: string }) {
       className={cn("h-full w-full", className)}
       data-cursor="CORE"
       role="img"
-      aria-label="Animated ASCII point-cloud of a neural core, reacting to the pointer"
+      aria-label="Interactive 3D ASCII planet; move the pointer to shape its particles and click for a ripple"
     >
       <canvas ref={canvasRef} className="block h-full w-full" aria-hidden />
     </div>

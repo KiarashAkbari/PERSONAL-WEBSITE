@@ -10,9 +10,9 @@ export default function Experience() {
   return (
     <section id="log" className="relative border-b border-line">
       <SectionHead
-        index="03"
-        title="Work Experience"
-        note="Track record in production client platforms, enterprise backend engineering, and applied fintech AI research."
+        index="02"
+        title="Experience"
+        note="Client delivery, enterprise software, and applied AI research."
       />
 
       <div className="divide-y divide-line">
