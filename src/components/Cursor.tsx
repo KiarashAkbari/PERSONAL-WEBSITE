@@ -70,14 +70,9 @@ export default function Cursor() {
         b.style.opacity = visible ? "1" : "0";
       }
       if (l) {
-        l.style.transform = `translate(${cur.x + 22}px, ${cur.y + 14}px)`;
-        l.style.opacity = visible ? "1" : "0";
-        const txt =
-          label !== ""
-            ? `[ ${label} ]`
-            : `X:${String(Math.round(cur.x)).padStart(4, "0")} Y:${String(
-                Math.round(cur.y)
-              ).padStart(4, "0")}`;
+        l.style.transform = `translate(${cur.x + 20}px, ${cur.y + 14}px)`;
+        l.style.opacity = visible && Boolean(label) ? "1" : "0";
+        const txt = label !== "" ? `[ ${label} ]` : "";
         if (l.textContent !== txt) l.textContent = txt;
       }
       raf = requestAnimationFrame(loop);

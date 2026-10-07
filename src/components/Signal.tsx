@@ -11,36 +11,36 @@ const CHANNELS = [
   {
     id: "MAIL",
     icon: Mail,
-    title: "EMAIL",
+    title: "Email",
     value: CONTACT.email,
-    note: "FASTEST CHANNEL — RESPONSE < 24H",
+    note: "Primary channel · Direct inbox (< 24h)",
     href: `mailto:${CONTACT.email}`,
     cursor: "MAIL",
   },
   {
     id: "GH",
     icon: GhMark,
-    title: "GITHUB",
+    title: "GitHub",
     value: "@KiarashAkbari",
-    note: "GROUND TRUTH — ALL PUBLIC BUILDS",
+    note: "All public repositories & source code",
     href: GH,
     cursor: "GH",
   },
   {
     id: "TEL",
     icon: Phone,
-    title: "PHONE",
+    title: "Phone",
     value: CONTACT.phone,
-    note: `${CONTACT.tz} — MASHHAD LOCAL`,
+    note: `${CONTACT.tz} · Mashhad Local Time`,
     href: `tel:${CONTACT.phoneHref}`,
     cursor: "CALL",
   },
   {
     id: "LOC",
     icon: MapPin,
-    title: "LOCATION",
+    title: "Location",
     value: CONTACT.location,
-    note: "REMOTE-FIRST — ANY TIMEZONE",
+    note: "Remote worldwide · Relocation friendly",
     href: SITE,
     cursor: "SITE",
   },
@@ -51,34 +51,31 @@ export default function Signal() {
     <section id="signal" className="relative border-b border-line">
       <SectionHead
         index="05"
-        title="SIGNAL"
-        note="OPEN CHANNELS — SOURCED FROM RESUME.PDF. BRING A HARD PROBLEM."
+        title="Get in Touch"
+        note="Direct contact channels for full-time AI engineering positions, backend development, and collaborations."
       />
 
       <div className="px-4 py-12 md:px-6 md:py-16">
-        <h2 className="xcond font-display text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[0.88]">
-          {/* `block` is load-bearing — see Hero.tsx: a clip-path on an inline
-              box with a block child is never painted by Chromium */}
+        <h2 className="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-tight tracking-tight">
           <Reveal clip as="span" className="block">
-            <span className="block">GOT A PROBLEM</span>
+            <span className="block">Let's Build Something</span>
           </Reveal>
           <Reveal clip as="span" className="block" delay={120}>
-            <span className="block">
-              <span className="stroke-ink">THAT NEEDS</span>{" "}
-              <span className="text-acc">EYES?</span>
+            <span className="block text-acc">
+              Remarkable Together.
             </span>
           </Reveal>
         </h2>
         <Reveal delay={220}>
-          <p className="copy mt-6 max-w-md text-ink/75">
-            Open to remote AI software engineering roles and collaborations.
-            The fastest way to reach me is through the channels below — bring
-            a hard problem and I'll bring the model.
+          <p className="copy mt-5 max-w-xl text-base leading-relaxed text-ink/80">
+            I am currently open to full-time AI software engineering roles, backend systems positions,
+            and select consulting projects. Whether you have a challenging engineering problem or an ambitious
+            product to launch, feel free to reach out.
           </p>
         </Reveal>
       </div>
 
-      {/* channel cards — gap-px over bg-line draws perfect hairline seams in every grid shape */}
+      {/* channel cards */}
       <address className="grid gap-px border-t border-line bg-line not-italic sm:grid-cols-2 lg:grid-cols-4">
         {CHANNELS.map((c, i) => (
           <Reveal key={c.id} delay={i * 80} className="bg-paper">
@@ -90,22 +87,22 @@ export default function Signal() {
               data-cursor={c.cursor}
               className="group flex h-full flex-col justify-between gap-8 px-4 py-6 transition-colors duration-300 hover:bg-ink hover:text-paper md:px-6 lg:py-8"
             >
-              <div className="flex items-center justify-between text-[10px] tracking-[0.3em] text-ink/50 group-hover:text-paper/50">
+              <div className="flex items-center justify-between text-xs font-semibold tracking-wider text-ink/60 group-hover:text-paper/70">
                 <span className="flex items-center gap-2">
-                  <c.icon size={13} className="text-acc" aria-hidden />
+                  <c.icon size={15} className="text-acc" aria-hidden />
                   {c.title}
                 </span>
                 <ArrowUpRight
-                  size={14}
+                  size={15}
                   aria-hidden
-                  className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-acc"
+                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-acc"
                 />
               </div>
               <div>
-                <div className="truncate font-mono text-[12px] font-bold tracking-[0.04em] md:text-[13px]">
+                <div className="truncate font-mono text-sm md:text-base font-bold text-ink group-hover:text-paper">
                   {c.value}
                 </div>
-                <div className="mt-1.5 text-[8.5px] tracking-[0.1em] text-ink/45 group-hover:text-paper/45">
+                <div className="mt-1.5 text-xs text-ink/50 group-hover:text-paper/60">
                   {c.note}
                 </div>
               </div>
@@ -116,35 +113,36 @@ export default function Signal() {
 
       {/* bottom bar */}
       <footer className="border-t border-line">
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-5 md:px-6">
-          <span className="text-[9px] tracking-[0.14em] text-ink/60 md:text-[10px]">
-            © 2026 KIARASH AKBARI
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-5 md:px-6 text-xs text-ink/70">
+          <span className="font-medium">
+            © 2026 Kiarash Akbari · AI &amp; Software Engineering
           </span>
           <span
-            className="hidden select-none overflow-hidden text-[9px] tracking-[0.08em] text-ink/30 md:block"
+            className="hidden select-none overflow-hidden text-xs text-ink/30 md:block"
             aria-hidden
           >
-            {ASCII_WAVE.slice(0, 48)}
+            {ASCII_WAVE.slice(0, 36)}
           </span>
-          <span className="text-[9px] tracking-[0.12em] text-ink/45">
-            ENG: REACT+TS+ASCII // DOC:KIA.SYS_V5.2
-          </span>
-          <button
-            onClick={scrollTop}
-            data-cursor="TOP"
-            className="group flex items-center gap-2 border border-line px-3 py-1.5 text-[9px] tracking-[0.25em] transition-colors hover:border-acc hover:text-acc"
-          >
-            RTB
-            <ArrowUp size={11} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-          </button>
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-ink/50">
+              React · TypeScript · Tailwind
+            </span>
+            <button
+              onClick={scrollTop}
+              data-cursor="TOP"
+              className="group flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-semibold transition-colors hover:border-acc hover:text-acc"
+            >
+              Top
+              <ArrowUp size={13} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
+            </button>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line px-4 py-2.5 text-[8.5px] tracking-[0.1em] text-ink/35 md:px-6">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line px-4 py-2.5 text-xs text-ink/50 md:px-6">
           <span>
-            DUAL-OPTIC READY — PRESS <span className="font-bold text-ink/60">[D]</span> TO
-            SWITCH DAY/NIGHT
+            Theme toggle: Press <span className="font-bold text-ink">[D]</span> to switch Day / Night mode
           </span>
           <span>
-            PSST — TYPE <span className="font-bold text-acc">RAINBOW</span> ANYWHERE
+            Easter egg: type <span className="font-bold text-acc">rainbow</span> anywhere
           </span>
         </div>
       </footer>

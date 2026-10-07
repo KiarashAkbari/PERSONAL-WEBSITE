@@ -105,26 +105,12 @@ html.dark {
    nearest allowed weight, matching the readability-floor policy.
    ============================================================ */
 .font-black,
-.font-extrabold,
-.font-semibold {
+.font-extrabold {
   font-weight: 700 !important;
 }
-.font-medium,
 .font-light,
 .font-thin {
   font-weight: 400 !important;
-}
-
-/* ============================================================
-   LABEL LAYER = BOLD — every tracked technical label (spec keys
-   like ROLE / FOCUS, DEPLOYING::, chips, tags, captions, nav
-   links, marquees, HUD readouts, strip texts) renders at 700.
-   Prose (.copy / .copy-sm) has no tracking class and stays at
-   400 — that is the whole hierarchy contract. Custom CSS lives
-   after the Tailwind import, so this beats utility classes.
-   ============================================================ */
-[class*="tracking-[0."] {
-  font-weight: 700;
 }
 
 /* ============================================================

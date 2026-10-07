@@ -93,10 +93,10 @@ export default function Nav({ ready }: { ready: boolean }) {
               onClick={scrollTop}
               data-cursor="TOP"
               aria-label="Back to top"
-              className="flex items-center gap-2 border-r border-line px-4 py-3 text-[11px] font-bold tracking-[0.2em] md:px-5"
+              className="flex items-center gap-2.5 border-r border-line px-4 py-3 text-xs md:text-sm font-bold tracking-tight text-ink md:px-5"
             >
               <span className="inline-block h-2.5 w-2.5 bg-acc" aria-hidden />
-              KIA<span className="text-acc">//</span>AKBARI
+              Kiarash Akbari
             </button>
 
           {/* links */}
@@ -106,9 +106,9 @@ export default function Nav({ ready }: { ready: boolean }) {
                 key={id}
                 onClick={() => go(id)}
                 data-cursor="GO"
-                className="group flex items-center gap-2 border-l border-line px-3 text-[10px] tracking-[0.25em] transition-colors hover:bg-ink hover:text-paper xl:px-5"
+                className="group flex items-center gap-2 border-l border-line px-3 text-xs font-semibold tracking-wide transition-colors hover:bg-ink hover:text-paper xl:px-4"
               >
-                <span className="text-acc">{i}</span>
+                <span className="text-acc font-mono text-[11px]">{i}</span>
                 {label}
               </button>
             ))}
@@ -116,9 +116,9 @@ export default function Nav({ ready }: { ready: boolean }) {
 
           {/* right cluster */}
           <div className="flex items-stretch">
-            <span className="hidden items-center gap-2 border-l border-line px-4 text-[10px] tabular tracking-[0.2em] text-ink/60 lg:flex">
+            <span className="hidden items-center gap-2 border-l border-line px-4 text-xs font-mono text-ink/65 lg:flex">
               <span className="inline-block h-1.5 w-1.5 animate-blink bg-acc" aria-hidden />
-              T:{time}
+              {time} (UTC+03:30)
             </span>
             <div className="hidden items-center border-l border-line pl-1 sm:flex">
               <ThemeToggle />
@@ -129,11 +129,10 @@ export default function Nav({ ready }: { ready: boolean }) {
               rel="noopener noreferrer"
               data-cursor="GH"
               aria-label="Kiarash Akbari on GitHub"
-              className="hidden items-center gap-2 border-l border-line px-4 text-[10px] transition-colors hover:bg-ink hover:text-paper sm:flex"
+              className="hidden items-center gap-2 border-l border-line px-4 text-xs font-medium transition-colors hover:bg-ink hover:text-paper sm:flex"
             >
-              <GhMark size={13} />
-              {/* mixed-case handle — wide tracking butchers lowercase */}
-              <span className="hidden tracking-[0.06em] xl:inline">@KiarashAkbari</span>
+              <GhMark size={14} />
+              <span className="hidden xl:inline">GitHub</span>
             </a>
             <button
               ref={menuToggleRef}
@@ -142,9 +141,9 @@ export default function Nav({ ready }: { ready: boolean }) {
               aria-label="Open navigation menu"
               aria-expanded={open}
               aria-controls="nav-overlay"
-              className="flex items-center gap-1 border-l border-line px-4 text-[10px] tracking-[0.25em] md:hidden"
+              className="flex items-center gap-1.5 border-l border-line px-4 text-xs font-bold tracking-wider md:hidden"
             >
-              MENU <Plus size={12} aria-hidden />
+              Menu <Plus size={13} aria-hidden />
             </button>
           </div>
         </div>
@@ -169,16 +168,16 @@ export default function Nav({ ready }: { ready: boolean }) {
         {...(!open ? ({ inert: true } as unknown as Record<string, unknown>) : {})}
         aria-hidden={!open}
       >
-        <div className="flex items-center justify-between border-b border-line-inv px-4 py-3 text-[10px] tracking-[0.25em]">
-          <span>KIA.SYS // NAV_MODULE</span>
+        <div className="flex items-center justify-between border-b border-line-inv px-4 py-3.5 text-xs tracking-wider">
+          <span className="font-bold">Navigation</span>
           <button
             ref={closeRef}
             onClick={() => setOpen(false)}
             data-cursor="CLOSE"
             aria-label="Close navigation menu"
-            className="font-bold text-acc"
+            className="font-bold text-acc px-2 py-1"
           >
-            [ CLOSE ]
+            ✕ Close
           </button>
         </div>
         <nav className="flex flex-1 flex-col justify-center gap-2 px-6">
@@ -189,16 +188,16 @@ export default function Nav({ ready }: { ready: boolean }) {
               className="group flex items-baseline gap-4 border-b border-line-inv py-4 text-left"
               style={{ transitionDelay: `${k * 40}ms` }}
             >
-              <span className="font-mono text-xs text-acc">{i}</span>
-              <span className="cond font-display text-5xl font-bold leading-none transition-transform duration-300 group-hover:translate-x-2">
+              <span className="font-mono text-sm text-acc">{i}</span>
+              <span className="font-display text-4xl font-bold leading-none transition-transform duration-300 group-hover:translate-x-2">
                 {label}
               </span>
             </button>
           ))}
         </nav>
-        <div className="flex items-center justify-between px-6 pb-8">
-          <span className="text-[10px] tracking-[0.14em] text-paper/50">
-            GITHUB.COM/KIARASHAKBARI <span className="text-acc">▸</span> T:{time}
+        <div className="flex items-center justify-between px-6 pb-8 text-xs text-paper/60">
+          <span>
+            github.com/KiarashAkbari
           </span>
           <ThemeToggle onInk className="border border-line-inv" />
         </div>

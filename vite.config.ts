@@ -18,9 +18,11 @@ export default defineConfig({
   },
   server: {
     host: "0.0.0.0",
-    // Opt-in extra dev hosts, comma-separated (e.g. VITE_DEV_ALLOWED_HOSTS=.example.app).
-    // Empty by default so the dev server keeps Vite's strict host checking.
-    allowedHosts: (process.env.VITE_DEV_ALLOWED_HOSTS ?? "").split(",").filter(Boolean),
+    allowedHosts: true,
+  },
+  preview: {
+    host: "0.0.0.0",
+    allowedHosts: true,
   },
   preview: {
     host: "0.0.0.0",

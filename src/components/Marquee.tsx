@@ -13,8 +13,8 @@ export default function Marquee({ items, inverted, slow, className, label }: Pro
     <div className="flex w-max shrink-0 items-center" aria-hidden={hidden || undefined}>
       {items.map((it, i) => (
         <span key={i} className="flex items-center whitespace-nowrap">
-          <span className="px-5 font-mono text-xs tracking-[0.18em] md:text-sm">{it}</span>
-          <span className="text-acc">▸</span>
+          <span className="px-6 font-medium text-xs md:text-sm tracking-wide">{it}</span>
+          <span className="text-acc font-bold">·</span>
         </span>
       ))}
     </div>
