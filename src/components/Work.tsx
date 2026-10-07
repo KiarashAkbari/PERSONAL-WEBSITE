@@ -73,7 +73,7 @@ function Item({
             {p.sub}
           </span>
         </span>
-        <span className="hidden shrink-0 text-xs font-semibold sm:inline">
+        <span className="shrink-0 text-xs font-semibold">
           {open ? "Close" : "Details"}
         </span>
         <Plus
@@ -177,14 +177,11 @@ function Item({
               </div>
             </div>
 
-            {hasVisual && (
+            {hasVisual && open && (
               <div className="space-y-3">
                 {p.img ? (
                   <>
                     <AsciiImage src={p.img} caption={p.fig} eager={p.id === "nids"} />
-                    <p className="text-sm leading-relaxed text-ink/65">
-                      Move over the image to reveal more detail.
-                    </p>
                   </>
                 ) : p.schematic ? (
                   <Schematic lines={p.schematic} title={p.fig ?? p.title} />
