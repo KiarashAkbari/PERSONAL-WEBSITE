@@ -22,4 +22,10 @@ export default defineConfig({
     // Empty by default so the dev server keeps Vite's strict host checking.
     allowedHosts: (process.env.VITE_DEV_ALLOWED_HOSTS ?? "").split(",").filter(Boolean),
   },
+  preview: {
+    host: "0.0.0.0",
+    // Same opt-in for `npm run preview` — a proxied/remote preview host is
+    // otherwise rejected with "Blocked request. This host is not allowed".
+    allowedHosts: (process.env.VITE_DEV_ALLOWED_HOSTS ?? "").split(",").filter(Boolean),
+  },
 });
