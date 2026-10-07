@@ -39,12 +39,16 @@ export default function Hero({ ready }: { ready: boolean }) {
             <div className="plus text-ink/25" />
           </div>
 
-          {/* h1 split across two clipped reveals — valid: Reveal renders inline spans, not block divs */}
+          {/* h1 split across two clipped reveals. `block` is load-bearing: a
+              `clip-path` on an inline box that wraps a block child is not
+              painted by Chromium at all (Safari ignores clip-path on inlines,
+              which is why this only ever looked right there) — the title came
+              out blank above AI_ENGINEER®. Block boxes clip and paint. */}
           <h1 className="xcond font-display text-[clamp(3.4rem,12vw,10.5rem)] font-bold leading-[0.84] tracking-[-0.015em]">
-            <Reveal as="span" clip delay={ready ? 100 : 800}>
+            <Reveal as="span" clip className="block" delay={ready ? 100 : 800}>
               <span className="block">KIARASH</span>
             </Reveal>
-            <Reveal as="span" clip delay={ready ? 220 : 920}>
+            <Reveal as="span" clip className="block" delay={ready ? 220 : 920}>
               <span className="block">
                 AKBARI
                 <span className="ml-3 align-top font-mono text-sm font-normal tracking-normal text-acc">

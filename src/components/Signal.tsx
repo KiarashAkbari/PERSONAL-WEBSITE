@@ -57,10 +57,12 @@ export default function Signal() {
 
       <div className="px-4 py-12 md:px-6 md:py-16">
         <h2 className="xcond font-display text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[0.88]">
-          <Reveal clip as="span">
+          {/* `block` is load-bearing — see Hero.tsx: a clip-path on an inline
+              box with a block child is never painted by Chromium */}
+          <Reveal clip as="span" className="block">
             <span className="block">GOT A PROBLEM</span>
           </Reveal>
-          <Reveal clip as="span" delay={120}>
+          <Reveal clip as="span" className="block" delay={120}>
             <span className="block">
               <span className="stroke-ink">THAT NEEDS</span>{" "}
               <span className="text-acc">EYES?</span>
