@@ -166,14 +166,12 @@ export default function AsciiField({ className }: { className?: string }) {
     wrap.addEventListener("pointerleave", onLeave, { passive: true });
     wrap.addEventListener("pointerdown", onDown, { passive: true });
 
-    const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), {
-      threshold: 0.02,
-    });
-    io.observe(wrap);
-
     const render = (now: number) => {
+      if (!running || !inView) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(render);
-      if (!running || !inView) return;
       if (now - last < 33) return; // ~30fps like the spec
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
@@ -316,6 +314,23 @@ export default function AsciiField({ className }: { className?: string }) {
       }
       ctx.globalAlpha = 1;
     };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) {
+          if (!raf) {
+            last = 0;
+            raf = requestAnimationFrame(render);
+          }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { threshold: 0.02 }
+    );
+    io.observe(wrap);
     raf = requestAnimationFrame(render);
 
     return () => {

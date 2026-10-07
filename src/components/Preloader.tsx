@@ -44,34 +44,68 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
   const [gone, setGone] = useState(false);
   const [tick, setTick] = useState(0);
   const doneRef = useRef(false);
-  const t0 = useRef(performance.now());
+  const t0 = useRef(0);
+  const rafRef = useRef(0);
+  const intervalRef = useRef<number | null>(null);
+  const finishTimerRef = useRef<number | null>(null);
 
-  const finish = () => {
-    if (doneRef.current) return;
+  const finish = (instant = false) => {
+    if (doneRef.current) {
+      // Let a manual skip cut short the brief automatic exit transition.
+      if (instant && finishTimerRef.current !== null) {
+        window.clearTimeout(finishTimerRef.current);
+        finishTimerRef.current = null;
+        onDone();
+      }
+      return;
+    }
     doneRef.current = true;
     setGone(true);
-    window.setTimeout(onDone, 620);
+
+    // A manual skip removes the overlay immediately. The automatic finish
+    // gets a brief exit transition while keeping total blocking time < 700ms.
+    if (instant) {
+      onDone();
+      return;
+    }
+    finishTimerRef.current = window.setTimeout(() => {
+      finishTimerRef.current = null;
+      onDone();
+    }, 110);
   };
 
   useEffect(() => {
-    let raf = 0;
-    let iv = 0;
-    const DUR = 750;
+    const DUR = 520;
+    t0.current = performance.now();
     const step = (now: number) => {
       const p = Math.min(1, (now - t0.current) / DUR);
       setPct(Math.floor(p * 100));
-      if (p < 1) raf = requestAnimationFrame(step);
+      if (p < 1) rafRef.current = requestAnimationFrame(step);
       else {
         setPct(100);
-        window.clearInterval(iv);
-        window.setTimeout(finish, 160);
+        if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+        finish();
       }
     };
-    raf = requestAnimationFrame(step);
-    iv = window.setInterval(() => setTick((t) => t + 1), 60);
+    rafRef.current = requestAnimationFrame(step);
+    intervalRef.current = window.setInterval(() => setTick((t) => t + 1), 60);
+    const skipWithKeyboard = (e: KeyboardEvent) => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Escape") return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.isContentEditable ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName ?? "")
+      )
+        return;
+      e.preventDefault();
+      finish(true);
+    };
+    window.addEventListener("keydown", skipWithKeyboard);
     return () => {
-      cancelAnimationFrame(raf);
-      window.clearInterval(iv);
+      cancelAnimationFrame(rafRef.current);
+      if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+      if (finishTimerRef.current !== null) window.clearTimeout(finishTimerRef.current);
+      window.removeEventListener("keydown", skipWithKeyboard);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -80,18 +114,12 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
 
   return (
     <div
-      onClick={finish}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
-          e.preventDefault();
-          finish();
-        }
-      }}
+      onClick={() => finish(true)}
       role="button"
       tabIndex={0}
-      aria-label="Loading portfolio — press Enter, Space or tap to skip"
+      aria-label="Loading portfolio — press Enter, Space or Escape, or tap to skip"
       className={cn(
-        "term fixed inset-0 z-[100] flex flex-col bg-ink text-paper transition-transform duration-[450ms] ease-[cubic-bezier(.76,0,.24,1)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-acc focus-visible:outline-offset-2",
+        "term fixed inset-0 z-[100] flex flex-col bg-ink text-paper transition-transform duration-[100ms] ease-[cubic-bezier(.76,0,.24,1)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-acc focus-visible:outline-offset-2",
         gone ? "-translate-y-full" : "translate-y-0"
       )}
     >
