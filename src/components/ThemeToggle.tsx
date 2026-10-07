@@ -39,24 +39,24 @@ export default function ThemeToggle({
     >
       <span
         className={cn(
-          "flex items-center gap-1.5 px-3 py-1 transition-colors",
+          "flex items-center gap-1.5 px-2.5 py-1 transition-colors font-semibold",
           !dark ? active : idle
         )}
       >
-        <Sun size={11} strokeWidth={2.2} />
-        <span className="hidden lg:inline">DAY</span>
+        <Sun size={12} strokeWidth={2} />
+        <span className="hidden lg:inline">Day</span>
       </span>
       <span className="w-px bg-current/20" aria-hidden />
       <span
         className={cn(
-          "flex items-center gap-1.5 px-3 py-1 transition-colors",
+          "flex items-center gap-1.5 px-2.5 py-1 transition-colors font-semibold",
           dark ? active : idle
         )}
       >
-        <Moon size={11} strokeWidth={2.2} />
-        <span className="hidden lg:inline">NIGHT</span>
+        <Moon size={12} strokeWidth={2} />
+        <span className="hidden lg:inline">Night</span>
       </span>
-      <span className="hidden items-center border-l border-current/20 pl-2 pr-1 text-acc xl:flex">
+      <span className="hidden items-center border-l border-current/20 pl-2 pr-1 text-acc font-mono text-[10px] xl:flex">
         [D]
       </span>
     </button>

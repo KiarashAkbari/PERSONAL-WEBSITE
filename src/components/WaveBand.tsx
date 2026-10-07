@@ -2,33 +2,24 @@ import AsciiWave from "./AsciiWave";
 import Reveal from "./Reveal";
 
 /**
- * FIG.02 — the interlude. A full-bleed 2D wave simulation rendered
- * through the same monospace grid as everything else on the page:
- * text as a physical medium, per the aino.agency playbook.
+ * Interactive 2D wave equation simulation rendered through an ASCII character grid.
  */
 export default function WaveBand() {
   return (
     <section aria-label="Interactive ASCII ripple field" className="relative border-b border-line">
-      <div className="flex items-center justify-between border-b border-line px-4 py-2 text-[9px] tracking-[0.14em] text-ink/60 md:px-6 md:text-[10px]">
-        <span>FIG.02 — RIPPLE_FIELD.ASCII</span>
-        <span className="hidden tracking-[0.1em] md:inline">
-          2D_WAVE_EQUATION <span className="text-acc">//</span> HOMAGE: AINO.AGENCY
+      <div className="flex items-center justify-between border-b border-line px-4 py-2.5 text-xs text-ink/70 md:px-6">
+        <span className="font-semibold tracking-wide">Interactive Lab // 2D ASCII Wave Simulation</span>
+        <span className="hidden tracking-normal md:inline text-ink/50">
+          Fluid height-field wave equations rendered on a monospace character matrix
         </span>
-        <span className="text-acc">DISTURB_WITH_POINTER ▚</span>
+        <span className="font-semibold text-acc">Move pointer to disturb ▚</span>
       </div>
 
-      {/* plain fade reveal, not `clip`: a clip-path over a live canvas whose
-          own IntersectionObserver gates the render loop can strand it shut.
-          Matches every other section on the page. */}
       <Reveal>
-        <div className="blueprint relative h-[46vh] min-h-[320px] md:h-[54vh]">
+        <div className="blueprint relative h-[42vh] min-h-[300px] md:h-[48vh]">
           <AsciiWave className="absolute inset-0" />
-          <div className="plus absolute left-3 top-3 text-ink/30" />
-          <div className="plus absolute right-3 top-3 text-ink/30" />
-          <div className="plus absolute bottom-3 left-3 text-ink/30" />
-          <div className="plus absolute bottom-3 right-3 text-ink/30" />
-          <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.2em] text-ink/40">
-            TEXT <span className="text-acc">AS</span> MEDIUM
+          <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 text-xs tracking-wider text-ink/50 bg-paper/80 px-3 py-1 border border-line backdrop-blur-xs">
+            Interactive Physics Canvas <span className="text-acc">·</span> Click or drag to create waves
           </div>
         </div>
       </Reveal>
