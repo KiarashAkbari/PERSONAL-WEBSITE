@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
-import { GhMark } from "./icons";
 import ThemeToggle from "./ThemeToggle";
 import { cn } from "../utils/cn";
-import { NAV_LINKS, GH } from "../data";
+import { NAV_LINKS } from "../data";
 import { scrollToId, scrollTop, startScroll, stopScroll } from "../lib/scroll";
 
 export default function Nav({ ready }: { ready: boolean }) {
   const [prog, setProg] = useState(0);
-  const [time, setTime] = useState("00:00:00");
   const [open, setOpen] = useState(false);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -21,17 +19,6 @@ export default function Nav({ ready }: { ready: boolean }) {
     window.addEventListener("scroll", on, { passive: true });
     on();
     return () => window.removeEventListener("scroll", on);
-  }, []);
-
-  useEffect(() => {
-    const f = () => {
-      const d = new Date();
-      const p = (n: number) => String(n).padStart(2, "0");
-      setTime(`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`);
-    };
-    f();
-    const iv = window.setInterval(f, 1000);
-    return () => window.clearInterval(iv);
   }, []);
 
   /* menu: escape closes, focus-trap, page scroll locks behind overlay */
@@ -90,25 +77,24 @@ export default function Nav({ ready }: { ready: boolean }) {
         <div className="flex items-stretch justify-between">
           {/* logo */}
           <button
-              onClick={scrollTop}
-              data-cursor="TOP"
-              aria-label="Back to top"
-              className="flex items-center gap-2.5 border-r border-line px-4 py-3 text-xs md:text-sm font-bold tracking-tight text-ink md:px-5"
-            >
-              <span className="inline-block h-2.5 w-2.5 bg-acc" aria-hidden />
-              Kiarash Akbari
-            </button>
+            onClick={scrollTop}
+            data-cursor="TOP"
+            aria-label="Back to top"
+            className="flex items-center gap-2.5 border-r border-line px-4 py-3 text-sm font-bold tracking-tight text-ink md:px-5"
+          >
+            <span className="inline-block h-2.5 w-2.5 bg-acc" aria-hidden />
+            Kiarash Akbari
+          </button>
 
           {/* links */}
           <nav className="hidden items-stretch md:flex">
-            {NAV_LINKS.map(([i, label, id]) => (
+            {NAV_LINKS.map(([, label, id]) => (
               <button
                 key={id}
                 onClick={() => go(id)}
                 data-cursor="GO"
                 className="group flex items-center gap-2 border-l border-line px-3 text-xs font-semibold tracking-wide transition-colors hover:bg-ink hover:text-paper xl:px-4"
               >
-                <span className="text-acc font-mono text-[11px]">{i}</span>
                 {label}
               </button>
             ))}
@@ -116,24 +102,9 @@ export default function Nav({ ready }: { ready: boolean }) {
 
           {/* right cluster */}
           <div className="flex items-stretch">
-            <span className="hidden items-center gap-2 border-l border-line px-4 text-xs font-mono text-ink/65 lg:flex">
-              <span className="inline-block h-1.5 w-1.5 animate-blink bg-acc" aria-hidden />
-              {time} (UTC+03:30)
-            </span>
             <div className="hidden items-center border-l border-line pl-1 sm:flex">
               <ThemeToggle />
             </div>
-            <a
-              href={GH}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-cursor="GH"
-              aria-label="Kiarash Akbari on GitHub"
-              className="hidden items-center gap-2 border-l border-line px-4 text-xs font-medium transition-colors hover:bg-ink hover:text-paper sm:flex"
-            >
-              <GhMark size={14} />
-              <span className="hidden xl:inline">GitHub</span>
-            </a>
             <button
               ref={menuToggleRef}
               onClick={() => setOpen(true)}
@@ -195,10 +166,7 @@ export default function Nav({ ready }: { ready: boolean }) {
             </button>
           ))}
         </nav>
-        <div className="flex items-center justify-between px-6 pb-8 text-xs text-paper/60">
-          <span>
-            github.com/KiarashAkbari
-          </span>
+        <div className="flex items-center justify-end px-6 pb-8">
           <ThemeToggle onInk className="border border-line-inv" />
         </div>
       </div>

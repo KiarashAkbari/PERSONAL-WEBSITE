@@ -1,151 +1,87 @@
 import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
 import { GhMark } from "./icons";
-import { CONTACT, GH, SITE } from "../data";
+import { CONTACT, GH } from "../data";
 import { scrollTop } from "../lib/scroll";
-
-const ASCII_WAVE = "▁▂▃▄▅▆▇█▇▆▅▄▃▂▁".repeat(6);
-
-const CHANNELS = [
-  {
-    id: "MAIL",
-    icon: Mail,
-    title: "Email",
-    value: CONTACT.email,
-    note: "Primary channel · Direct inbox (< 24h)",
-    href: `mailto:${CONTACT.email}`,
-    cursor: "MAIL",
-  },
-  {
-    id: "GH",
-    icon: GhMark,
-    title: "GitHub",
-    value: "@KiarashAkbari",
-    note: "All public repositories & source code",
-    href: GH,
-    cursor: "GH",
-  },
-  {
-    id: "TEL",
-    icon: Phone,
-    title: "Phone",
-    value: CONTACT.phone,
-    note: `${CONTACT.tz} · Mashhad Local Time`,
-    href: `tel:${CONTACT.phoneHref}`,
-    cursor: "CALL",
-  },
-  {
-    id: "LOC",
-    icon: MapPin,
-    title: "Location",
-    value: CONTACT.location,
-    note: "Remote worldwide · Relocation friendly",
-    href: SITE,
-    cursor: "SITE",
-  },
-];
 
 export default function Signal() {
   return (
     <section id="signal" className="relative border-b border-line">
       <SectionHead
-        index="05"
+        index="04"
         title="Get in Touch"
-        note="Direct contact channels for full-time AI engineering positions, backend development, and collaborations."
+        note="Open to full-time AI and backend roles, select consulting, and useful collaborations."
       />
 
-      <div className="px-4 py-12 md:px-6 md:py-16">
-        <h2 className="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-tight tracking-tight">
-          <Reveal clip as="span" className="block">
-            <span className="block">Let's Build Something</span>
-          </Reveal>
-          <Reveal clip as="span" className="block" delay={120}>
-            <span className="block text-acc">
-              Remarkable Together.
-            </span>
-          </Reveal>
-        </h2>
-        <Reveal delay={220}>
-          <p className="copy mt-5 max-w-xl text-base leading-relaxed text-ink/80">
-            I am currently open to full-time AI software engineering roles, backend systems positions,
-            and select consulting projects. Whether you have a challenging engineering problem or an ambitious
-            product to launch, feel free to reach out.
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-14">
+        <div className="max-w-3xl">
+          <h2 className="font-display text-[clamp(2rem,5vw,4rem)] font-bold leading-tight tracking-tight text-ink">
+            Have a role or project in mind?
+          </h2>
+          <p className="copy mt-4 max-w-2xl text-ink/75">
+            I’m currently open to full-time software engineering roles and select consulting work.
+            Send me a note and I’ll get back to you.
           </p>
-        </Reveal>
-      </div>
-
-      {/* channel cards */}
-      <address className="grid gap-px border-t border-line bg-line not-italic sm:grid-cols-2 lg:grid-cols-4">
-        {CHANNELS.map((c, i) => (
-          <Reveal key={c.id} delay={i * 80} className="bg-paper">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <a
-              href={c.href}
-              target={c.href.startsWith("http") ? "_blank" : undefined}
-              rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              aria-label={`${c.title}: ${c.value} — ${c.note}`}
-              data-cursor={c.cursor}
-              className="group flex h-full flex-col justify-between gap-8 px-4 py-6 transition-colors duration-300 hover:bg-ink hover:text-paper md:px-6 lg:py-8"
+              href={`mailto:${CONTACT.email}`}
+              data-cursor="MAIL"
+              className="inline-flex items-center gap-2.5 border border-ink bg-ink px-5 py-3.5 text-sm font-semibold text-paper transition-colors hover:border-acc hover:bg-acc hover:text-ink"
             >
-              <div className="flex items-center justify-between text-xs font-semibold tracking-wider text-ink/60 group-hover:text-paper/70">
-                <span className="flex items-center gap-2">
-                  <c.icon size={15} className="text-acc" aria-hidden />
-                  {c.title}
-                </span>
-                <ArrowUpRight
-                  size={15}
-                  aria-hidden
-                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-acc"
-                />
-              </div>
-              <div>
-                <div className="truncate font-mono text-sm md:text-base font-bold text-ink group-hover:text-paper">
-                  {c.value}
-                </div>
-                <div className="mt-1.5 text-xs text-ink/50 group-hover:text-paper/60">
-                  {c.note}
-                </div>
-              </div>
+              <Mail size={16} aria-hidden />
+              Email me
+              <ArrowUpRight size={15} aria-hidden />
             </a>
-          </Reveal>
-        ))}
-      </address>
-
-      {/* bottom bar */}
-      <footer className="border-t border-line">
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-5 md:px-6 text-xs text-ink/70">
-          <span className="font-medium">
-            © 2026 Kiarash Akbari · AI &amp; Software Engineering
-          </span>
-          <span
-            className="hidden select-none overflow-hidden text-xs text-ink/30 md:block"
-            aria-hidden
-          >
-            {ASCII_WAVE.slice(0, 36)}
-          </span>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-ink/50">
-              React · TypeScript · Tailwind
-            </span>
-            <button
-              onClick={scrollTop}
-              data-cursor="TOP"
-              className="group flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-semibold transition-colors hover:border-acc hover:text-acc"
-            >
-              Top
-              <ArrowUp size={13} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-            </button>
+            <span className="text-sm text-ink/70">{CONTACT.email}</span>
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-line px-4 py-2.5 text-xs text-ink/50 md:px-6">
-          <span>
-            Theme toggle: Press <span className="font-bold text-ink">[D]</span> to switch Day / Night mode
-          </span>
-          <span>
-            Easter egg: type <span className="font-bold text-acc">rainbow</span> anywhere
-          </span>
+
+        <div className="mt-10 grid gap-6 border-y border-line py-6 sm:grid-cols-3 sm:gap-8">
+          <div>
+            <p className="text-sm font-semibold text-ink">GitHub</p>
+            <a
+              href={GH}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="GH"
+              className="mt-1 inline-flex items-center gap-1.5 text-sm text-ink/70 underline decoration-acc underline-offset-4 hover:text-acc"
+            >
+              <GhMark size={14} aria-hidden />
+              @KiarashAkbari
+            </a>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-ink">Phone</p>
+            <a
+              href={`tel:${CONTACT.phoneHref}`}
+              data-cursor="CALL"
+              className="mt-1 inline-flex items-center gap-1.5 text-sm text-ink/70 underline decoration-acc underline-offset-4 hover:text-acc"
+            >
+              <Phone size={14} aria-hidden />
+              {CONTACT.phone}
+            </a>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-ink">Location</p>
+            <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-ink/70">
+              <MapPin size={14} className="text-acc" aria-hidden />
+              {CONTACT.location} · Remote worldwide
+            </p>
+          </div>
         </div>
-      </footer>
+
+        <footer className="flex flex-wrap items-center justify-between gap-4 pt-6 text-sm text-ink/60">
+          <span>© 2026 Kiarash Akbari</span>
+          <button
+            onClick={scrollTop}
+            data-cursor="TOP"
+            className="group inline-flex items-center gap-1.5 border border-line px-3 py-2 font-semibold text-ink transition-colors hover:border-acc hover:text-acc"
+          >
+            Back to top
+            <ArrowUp size={14} className="transition-transform duration-300 group-hover:-translate-y-0.5" aria-hidden />
+          </button>
+        </footer>
+      </div>
     </section>
   );
 }

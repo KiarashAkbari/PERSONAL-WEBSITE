@@ -110,13 +110,6 @@ export default function AsciiWave({ className }: { className?: string }) {
     wrap.addEventListener("pointermove", onMove, { passive: true });
     wrap.addEventListener("pointerdown", onDown, { passive: true });
 
-    // threshold 0, not 0.02: a clipping ancestor or a partially-entered band
-    // can sit below 2% for a long time and leave the field frozen.
-    const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), {
-      threshold: 0,
-    });
-    io.observe(wrap);
-
     const stepPhysics = () => {
       const w = cols + 2;
       for (let y = 1; y <= rows; y++) {
@@ -133,8 +126,11 @@ export default function AsciiWave({ className }: { className?: string }) {
     };
 
     const render = (now: number) => {
+      if (!running || !inView) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(render);
-      if (!running || !inView) return;
       if (now - last < 40) return;
       last = now;
       const t = now / 1000;
@@ -191,6 +187,25 @@ export default function AsciiWave({ className }: { className?: string }) {
       }
       ctx.globalAlpha = 1;
     };
+
+    // Stop the animation loop completely off-screen, then resume on entry.
+    // Threshold 0 avoids missing a partially-visible band.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) {
+          if (!raf) {
+            last = 0;
+            raf = requestAnimationFrame(render);
+          }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(wrap);
     raf = requestAnimationFrame(render);
 
     return () => {
