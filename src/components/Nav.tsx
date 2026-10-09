@@ -70,7 +70,7 @@ export default function Nav({ ready }: { ready: boolean }) {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-[80] border-b border-line bg-paper/90 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]",
+          "site-nav fixed inset-x-0 top-0 z-[80] border-b border-line bg-paper/90 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]",
           ready ? "translate-y-0" : "-translate-y-full"
         )}
       >
@@ -80,7 +80,7 @@ export default function Nav({ ready }: { ready: boolean }) {
             onClick={scrollTop}
             data-cursor="TOP"
             aria-label="Back to top"
-            className="flex items-center gap-2.5 border-r border-line px-4 py-3 text-sm font-bold tracking-tight text-ink md:px-5"
+            className="site-nav-brand flex items-center gap-2.5 border-r border-line px-4 py-3 text-sm font-bold tracking-tight text-ink md:px-5"
           >
             <span className="inline-block h-2.5 w-2.5 bg-acc" aria-hidden />
             Kiarash Akbari
@@ -93,7 +93,7 @@ export default function Nav({ ready }: { ready: boolean }) {
                 key={id}
                 onClick={() => go(id)}
                 data-cursor="GO"
-                className="group flex items-center gap-2 border-l border-line px-3 text-xs font-semibold tracking-wide transition-colors hover:bg-ink hover:text-paper xl:px-4"
+                className="site-nav-link group flex items-center gap-2 border-l border-line px-3 text-xs font-semibold tracking-wide transition-colors hover:bg-ink hover:text-paper xl:px-4"
               >
                 {label}
               </button>

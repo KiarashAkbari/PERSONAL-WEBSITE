@@ -27,7 +27,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="relative min-h-screen bg-paper font-mono text-ink">
+      <div className="punk-page relative min-h-screen bg-paper font-display text-ink">
         {/* sleek fast preloader */}
         {!booted && (
           <Preloader

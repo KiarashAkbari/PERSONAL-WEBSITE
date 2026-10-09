@@ -5,6 +5,8 @@ export type Project = {
   sub: string;
   year: string;
   status: string;
+  lang: string;
+  stars?: number;
   desc: string;
   features: string[];
   stack: string[];
@@ -29,6 +31,7 @@ export const CONTACT = {
   phone: "+98 922 233 0780",
   phoneHref: "+989222330780",
   location: "Mashhad, Iran",
+  tz: "UTC+03:30",
 };
 
 const IMG = (n: string) =>
@@ -42,6 +45,7 @@ export const PROJECTS: Project[] = [
     sub: "Smart-home catalog and product configurator",
     year: "2026",
     status: "In Production",
+    lang: "Full-Stack (React / JS)",
     desc: "Led delivery of a production catalog for smart-home products. A shared product model drives product pages, filters, and configuration options, replacing separate hard-coded pages.",
     features: [
       "One product data source powers product pages and configuration options",
@@ -71,6 +75,7 @@ export const PROJECTS: Project[] = [
     sub: "AI assistant for building-code questions",
     year: "2025",
     status: "Private Client Project",
+    lang: "Python / AI",
     desc: "Built the backend for an AI assistant that answers building-code questions. It searches regulations alongside building data, then checks each response against source clauses so answers include citations.",
     features: [
       "Combines meaning-based search with a graph of building relationships",
@@ -97,6 +102,7 @@ export const PROJECTS: Project[] = [
     sub: "Network anomaly detection and investigation",
     year: "2025",
     status: "Deployed v5",
+    lang: "Python / ML",
     desc: "Built a network monitoring tool that learns the patterns of normal traffic and flags unusual activity, including attacks it was not trained on. A live dashboard helps analysts review alerts and the traffic behind them.",
     features: [
       "Captures packets and groups TCP/UDP traffic with Scapy",
@@ -124,6 +130,7 @@ export const PROJECTS: Project[] = [
     sub: "Offline-ready city and transit maps",
     year: "2025",
     status: "Active",
+    lang: "Python / GIS",
     desc: "Built a mapping pipeline for unreliable or disrupted internet. It packages city and transit data into self-contained offline maps and distributes scheduled updates through Telegram.",
     features: [
       "Compiles and optimizes city and transit data",
@@ -142,6 +149,7 @@ export const PROJECTS: Project[] = [
     sub: "Save dynamic websites as offline archives",
     year: "2025",
     status: "Stable",
+    lang: "Python / Async",
     desc: "Built a desktop web-archiving tool that captures dynamic pages and their assets with Playwright, then assembles offline copies. A PyQt6 console manages crawl jobs, while SQLite stores sessions so work can resume.",
     features: [
       "Captures pages, scripts, styles, fonts, and media",
@@ -160,6 +168,7 @@ export const PROJECTS: Project[] = [
     sub: "Local notes and tasks, no setup required",
     year: "2024",
     status: "Shipped",
+    lang: "JavaScript",
     desc: "Built a notes and task manager with plain HTML, CSS, and JavaScript. Data stays in the browser, so it runs without a build step or external packages.",
     features: [
       "Works in a browser with no install or build step",
@@ -178,6 +187,7 @@ export const PROJECTS: Project[] = [
     sub: "Interactive ASCII visuals and a responsive interface",
     year: "2026",
     status: "Current Site",
+    lang: "TypeScript / React",
     desc: "This portfolio pairs two interactive ASCII studies—a pointer-reactive 3D field and a 2D wave—with a responsive project archive and Day/Night themes.",
     features: [
       "3D field that tilts and responds to pointer movement and clicks",
@@ -190,15 +200,15 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-/* Structured skills categorized for readability and quick scanning */
+/* Concise skill summaries for quick scanning */
 export const CAPABILITIES = [
   {
     group: "Applied AI",
-    summary: "AI search with citations · Graph and vector databases · Deep learning · Anomaly detection",
+    summary: "RAG with citations · Graph and vector search · Deep learning · Anomaly detection · TensorFlow and Keras · Scikit-learn and NumPy",
   },
   {
     group: "Backend & Data",
-    summary: "Python · FastAPI · Neo4j · ChromaDB · PostgreSQL · SQLite · Docker",
+    summary: "Python · FastAPI · Neo4j and Cypher · ChromaDB · PostgreSQL · SQLite · Docker · GitHub Actions",
   },
   {
     group: "Languages & Interfaces",
@@ -206,13 +216,14 @@ export const CAPABILITIES = [
   },
   {
     group: "Automation & Mapping",
-    summary: "Playwright · BeautifulSoup · Scapy · Folium · Streamlit",
+    summary: "Playwright · BeautifulSoup · Scapy · Folium · Streamlit · Pandas",
   },
 ];
 
 /* Professional Experience */
 export type Experience = {
   id: string;
+  index: string;
   role: string;
   org: string;
   orgNote: string;
@@ -220,39 +231,45 @@ export type Experience = {
   period: string;
   current?: boolean;
   points: string[];
+  tags: string[];
 };
 
 export const EXPERIENCE: Experience[] = [
   {
     id: "vino",
+    index: "01",
     role: "Full-Stack Developer & Project Lead",
     org: "Vino — Smart Home Platform",
     orgNote: "Client product · In production",
     where: "Remote",
-    period: "06.2026 — Present",
+    period: "Jun 2026 — Present",
     current: true,
     points: [
       "Built a product catalog with shared data driving product pages, filters, and configuration options.",
       "Led client feedback, feature-branch development, code reviews, and production releases.",
     ],
+    tags: ["Product Architecture", "Data-Driven UI", "Git Flow", "Client Delivery"],
   },
   {
     id: "telus",
+    index: "02",
     role: "Software Engineering Associate",
     org: "Telus",
     orgNote: "Enterprise software · Distributed team",
     where: "Remote",
-    period: "01.2025 — 12.2025",
+    period: "Jan 2025 — Dec 2025",
     points: [
       "Worked with distributed teams on enterprise backend services and production code reviews.",
       "Supported service maintenance and reliability improvements.",
     ],
+    tags: ["Enterprise Backend", "Distributed Teams", "Version Control", "Production CI/CD"],
   },
   {
     id: "dotin",
+    index: "03",
     role: "AI & Data Science Researcher",
     org: "Dotin Financial Technologies Lab",
-    orgNote: "Ferdowsi University of Mashhad · FANAP Group",
+    orgNote: "Ferdowsi University of Mashhad · FANAP Banking Software Group",
     where: "Mashhad, Iran",
     period: "2025 — Present",
     current: true,
@@ -260,6 +277,7 @@ export const EXPERIENCE: Experience[] = [
       "Research applied machine learning for financial technology with Dotin's lab at Ferdowsi University.",
       "Explore predictive models for financial and transaction data.",
     ],
+    tags: ["Applied ML Research", "Fintech AI", "Data Science", "R&D"],
   },
 ];
 

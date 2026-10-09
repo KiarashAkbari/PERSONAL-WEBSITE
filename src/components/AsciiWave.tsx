@@ -188,8 +188,7 @@ export default function AsciiWave({ className }: { className?: string }) {
       ctx.globalAlpha = 1;
     };
 
-    // Stop the animation loop completely off-screen, then resume on entry.
-    // Threshold 0 avoids missing a partially-visible band.
+    // Stop the render loop off-screen and resume it when the wave returns.
     const io = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting;

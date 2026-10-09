@@ -44,7 +44,7 @@ export default function ThemeToggle({
         )}
       >
         <Sun size={12} strokeWidth={2} />
-        <span>Day</span>
+        <span className="hidden lg:inline">Day</span>
       </span>
       <span className="w-px bg-current/20" aria-hidden />
       <span
@@ -54,7 +54,7 @@ export default function ThemeToggle({
         )}
       >
         <Moon size={12} strokeWidth={2} />
-        <span>Night</span>
+        <span className="hidden lg:inline">Night</span>
       </span>
       <span className="hidden items-center border-l border-current/20 pl-2 pr-1 text-acc font-mono text-[10px] xl:flex">
         [D]

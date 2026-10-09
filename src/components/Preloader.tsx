@@ -43,6 +43,11 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
       return;
     }
     doneRef.current = true;
+    cancelAnimationFrame(rafRef.current);
+    if (intervalRef.current !== null) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
     setGone(true);
 
     if (instant) {
@@ -56,7 +61,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
   };
 
   useEffect(() => {
-    const duration = 520;
+    const duration = 480;
     t0.current = performance.now();
     const step = (now: number) => {
       const progress = Math.min(1, (now - t0.current) / duration);

@@ -8,7 +8,7 @@ export default function Profile() {
       <SectionHead
         index="03"
         title="About & Skills"
-        note="How I approach engineering, and the areas I work in."
+        note="How I approach engineering and the areas I work in."
       />
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-9 md:px-6 md:py-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">

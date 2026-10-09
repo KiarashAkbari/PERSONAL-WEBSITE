@@ -45,7 +45,7 @@ function Item({
   const hasVisual = Boolean(p.img || p.schematic);
 
   return (
-    <article className="border-b border-line last:border-b-0">
+    <article className="project-item border-b border-line last:border-b-0">
       <button
         onClick={onToggle}
         data-cursor={open ? "CLOSE" : "DETAILS"}
@@ -53,15 +53,15 @@ function Item({
         aria-controls={`work-panel-${p.id}`}
         aria-label={`${open ? "Hide" : "View"} details for ${p.title}`}
         className={cn(
-          "group flex w-full items-center gap-3 px-4 py-5 text-left transition-colors duration-200 md:gap-5 md:px-6",
+          "project-toggle group flex w-full items-center gap-3 px-4 py-5 text-left transition-colors duration-200 md:gap-5 md:px-6",
           open ? "bg-ink text-paper" : "bg-paper hover:bg-ink/[0.035]"
         )}
       >
-        <span className="w-7 shrink-0 font-mono text-xs font-semibold text-acc" aria-hidden>
+        <span className="project-index w-7 shrink-0 font-mono text-xs font-semibold text-acc" aria-hidden>
           {p.index}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block font-display text-[clamp(1.25rem,2.8vw,2rem)] font-bold leading-tight">
+          <span className="project-title block font-display text-[clamp(1.25rem,2.8vw,2rem)] font-bold leading-tight">
             {p.title}
           </span>
           <span
