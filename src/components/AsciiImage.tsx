@@ -31,8 +31,19 @@ export default function AsciiImage({
   const [shown, setShown] = useState<string[] | null>(null);
   const [err, setErr] = useState(false);
   const [hover, setHover] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
   const progress = useRef(0);
   const rafRef = useRef(0);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const measure = () => setContainerWidth(root.clientWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
 
   /* build ascii from image */
   useEffect(() => {
@@ -131,16 +142,19 @@ export default function AsciiImage({
     };
   }, [base, cols]);
 
-  /* fit: char grid width = cols·fs·0.6 must stay under ~330px for the
-     narrowest card slot — the /1.7 divisor guarantees that at any cols */
-  const fs = Math.max(5, Math.min(9, 924 / cols / 1.7));
+  /* Fit the character grid to its actual card width, including padding. */
+  const fs = Math.max(5, Math.min(9, ((containerWidth || 320) - 28) / (cols * 0.6)));
 
   return (
     <figure
       ref={rootRef}
-      className={cn("group/fig", className)}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      className={cn(className)}
+      onPointerEnter={(event) => {
+        if (event.pointerType !== "touch") setHover(true);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "touch") setHover(false);
+      }}
       data-cursor="RAW"
     >
       <div className="relative border border-line bg-ink">
@@ -152,7 +166,7 @@ export default function AsciiImage({
 
         {err ? (
           <div className="flex min-h-[220px] items-center justify-center p-6 text-[10px] tracking-[0.3em] text-paper/50">
-            [ SIGNAL_LOST — RAW BELOW ]
+            Image unavailable
           </div>
         ) : (
           <pre
@@ -163,14 +177,14 @@ export default function AsciiImage({
             {(shown ?? base ?? []).map((l, i) => (
               <div key={i}>{l}</div>
             ))}
-            {!base && <div className="p-6 text-[10px] tracking-[0.3em]">DECODING…</div>}
+            {!base && <div className="p-6 text-sm">Loading image…</div>}
           </pre>
         )}
 
         {/* raw capture — pixel-stepped loader feel on hover */}
         <img
           src={src}
-          alt={caption ?? "capture"}
+          alt={caption ?? "Project image"}
           crossOrigin="anonymous"
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
@@ -182,12 +196,20 @@ export default function AsciiImage({
         />
       </div>
 
-      {/* caption bar */}
       {caption && (
-        <figcaption className="flex items-center justify-between gap-4 pt-2 text-[9px] tracking-[0.08em] text-ink/45">
-          <span className="truncate">{caption}</span>
-          <span className="shrink-0 text-acc">OPTIC:{hover ? "RAW" : "ASCII"}</span>
+        <figcaption className="pt-2 text-sm leading-relaxed text-ink/65">
+          {caption}
         </figcaption>
+      )}
+      {!err && (
+        <button
+          type="button"
+          onClick={() => setHover((value) => !value)}
+          aria-pressed={hover}
+          className="mt-2 inline-flex border-b border-acc pb-0.5 text-sm font-semibold text-ink transition-colors hover:text-acc"
+        >
+          {hover ? "Show ASCII preview" : "View original image"}
+        </button>
       )}
     </figure>
   );
