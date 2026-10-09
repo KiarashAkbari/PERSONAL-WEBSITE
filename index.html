@@ -7,7 +7,7 @@
     <meta name="author" content="Kiarash Akbari" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://kiarashakbari.github.io/PERSONAL-WEBSITE/" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://kiarashakbari.github.io/PERSONAL-WEBSITE/" />
     <meta property="og:title" content="Kiarash Akbari — AI & Software Engineer" />
@@ -20,7 +20,7 @@
     <meta name="twitter:title" content="Kiarash Akbari — AI & Software Engineer" />
     <meta name="twitter:description" content="AI Software Engineer specializing in backend architectures, RAG pipelines, and machine learning systems." />
     <meta name="twitter:image" content="https://kiarashakbari.github.io/PERSONAL-WEBSITE/og.svg" />
-    <meta name="theme-color" content="#f4f2ec" />
+    <meta name="theme-color" content="#08090a" />
     <!-- color-scheme mastery: we ship our own dual-optic theme, so UAs
          must never force-transform the page (Chrome/Edge "Auto Dark") -->
     <meta name="color-scheme" content="light dark" />
@@ -40,25 +40,22 @@
         "knowsAbout": ["RAG", "Anomaly Detection", "Backend Systems", "Neo4j", "FastAPI"]
       }
     </script>
-    <!-- Typography is 100% system Helvetica — zero webfont download, instant first paint.
-         (ASCII plotting surfaces use the OS monospace stack; characters there are
-          coordinates, not prose, and must stay grid-aligned.) -->
+    <!-- System sans + OS monospace only: no webfont download, instant first paint.
+         ASCII plotting surfaces stay monospace because the glyphs are coordinates. -->
     <script>
-      /* anti-FOUC theme bootstrap — runs before first paint.
-         "only light" forbids UA forced-darkening of the day optic;
-         "dark" tells the UA the night optic is natively dark. */
+      /* Anti-FOUC bootstrap: the black optic is the default; a saved choice wins. */
       (function () {
+        var root = document.documentElement;
+        var dark = true;
         try {
           var stored = localStorage.getItem("kia-theme");
-          var dark = stored
-            ? stored === "dark"
-            : window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var root = document.documentElement;
-          root.classList.toggle("dark", dark);
-          root.style.colorScheme = dark ? "dark" : "only light";
-          var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", dark ? "#22201c" : "#f4f2ec");
+          if (stored === "dark") dark = true;
+          else if (stored === "light") dark = false;
         } catch (e) {}
+        root.classList.toggle("dark", dark);
+        root.style.colorScheme = dark ? "dark" : "only light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#08090a" : "#eeece5");
       })();
     </script>
     <script>
@@ -116,10 +113,10 @@
     <a href="#hero" class="skip-link">Skip to content</a>
     <noscript>
       <div style="padding:2rem;font:14px/1.6 ui-monospace,monospace;max-width:680px;margin:0 auto">
-        <strong>KIA.SYS — KIA_AKBARI.SYS</strong><br />
-        This dossier is rendered client-side. Please enable JavaScript to view the full personnel dossier.<br /><br />
-        Direct links: <a href="#work">Work</a> · <a href="#log">Log</a> · <a href="#profile">Profile</a> ·
-        <a href="#signal">Signal</a><br />
+        <strong>Kiarash Akbari — AI &amp; Software Engineer</strong><br />
+        This portfolio is rendered client-side. Please enable JavaScript to view the full experience.<br /><br />
+        Direct links: <a href="#work">Work</a> · <a href="#log">Experience</a> · <a href="#profile">About</a> ·
+        <a href="#signal">Contact</a><br />
         GitHub: <a href="https://github.com/KiarashAkbari">github.com/KiarashAkbari</a> · Email: Kiarash.Akbari.Contact@gmail.com
       </div>
     </noscript>

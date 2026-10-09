@@ -1,22 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f4f2ec"/>
-  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#2a2723" stroke-width="2"/>
-  <!-- blueprint grid dots -->
-  <g fill="#2a2723" opacity="0.07">
-    <rect x="80" y="80" width="2" height="2"/><rect x="136" y="80" width="2" height="2"/><rect x="192" y="80" width="2" height="2"/><rect x="248" y="80" width="2" height="2"/><rect x="304" y="80" width="2" height="2"/><rect x="360" y="80" width="2" height="2"/><rect x="416" y="80" width="2" height="2"/><rect x="472" y="80" width="2" height="2"/><rect x="528" y="80" width="2" height="2"/><rect x="584" y="80" width="2" height="2"/><rect x="640" y="80" width="2" height="2"/><rect x="696" y="80" width="2" height="2"/><rect x="752" y="80" width="2" height="2"/><rect x="808" y="80" width="2" height="2"/><rect x="864" y="80" width="2" height="2"/><rect x="920" y="80" width="2" height="2"/><rect x="976" y="80" width="2" height="2"/><rect x="1032" y="80" width="2" height="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#08090a"/>
+  <path d="M0 79.5h1200M0 550.5h1200M800 80v470" stroke="#efede6" stroke-opacity=".15"/>
+  <path d="M64 80h736v470H64z" stroke="#efede6" stroke-opacity=".35"/>
+  <g fill="#efede6" fill-opacity=".11">
+    <circle cx="95" cy="110" r="1.5"/><circle cx="135" cy="110" r="1.5"/><circle cx="175" cy="110" r="1.5"/><circle cx="215" cy="110" r="1.5"/><circle cx="255" cy="110" r="1.5"/><circle cx="295" cy="110" r="1.5"/><circle cx="335" cy="110" r="1.5"/><circle cx="375" cy="110" r="1.5"/><circle cx="415" cy="110" r="1.5"/><circle cx="455" cy="110" r="1.5"/><circle cx="495" cy="110" r="1.5"/><circle cx="535" cy="110" r="1.5"/><circle cx="575" cy="110" r="1.5"/><circle cx="615" cy="110" r="1.5"/><circle cx="655" cy="110" r="1.5"/><circle cx="695" cy="110" r="1.5"/><circle cx="735" cy="110" r="1.5"/>
+    <circle cx="95" cy="150" r="1.5"/><circle cx="135" cy="150" r="1.5"/><circle cx="175" cy="150" r="1.5"/><circle cx="215" cy="150" r="1.5"/><circle cx="255" cy="150" r="1.5"/><circle cx="295" cy="150" r="1.5"/><circle cx="335" cy="150" r="1.5"/><circle cx="375" cy="150" r="1.5"/><circle cx="415" cy="150" r="1.5"/><circle cx="455" cy="150" r="1.5"/><circle cx="495" cy="150" r="1.5"/><circle cx="535" cy="150" r="1.5"/><circle cx="575" cy="150" r="1.5"/><circle cx="615" cy="150" r="1.5"/><circle cx="655" cy="150" r="1.5"/><circle cx="695" cy="150" r="1.5"/><circle cx="735" cy="150" r="1.5"/>
   </g>
-  <text x="80" y="90" font-family="Helvetica, Arial, sans-serif" font-size="11" letter-spacing="3" fill="#2a2723" opacity="0.45">01 // DOSSIER — kiarashakbari.github.io/PERSONAL-WEBSITE</text>
-  <text x="80" y="290" font-family="Helvetica, Arial, sans-serif" font-size="96" font-weight="700" letter-spacing="-3" fill="#2a2723">KIARASH</text>
-  <text x="80" y="385" font-family="Helvetica, Arial, sans-serif" font-size="96" font-weight="700" letter-spacing="-3" fill="#2a2723">AKBARI</text>
-  <text x="80" y="430" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#dd5223">AI SOFTWARE ENGINEER</text>
-  <text x="80" y="470" font-family="Helvetica, Arial, sans-serif" font-size="13" letter-spacing="2" fill="#2a2723" opacity="0.6">RAG PIPELINES · ANOMALY DETECTION · BACKEND SYSTEMS</text>
-  <rect x="80" y="510" width="10" height="10" fill="#dd5223"/>
-  <text x="100" y="519" font-family="Helvetica, Arial, sans-serif" font-size="10" letter-spacing="2" fill="#2a2723">KIA.SYS v5.2 — SIGNAL &gt; NOISE</text>
-  <!-- corner pluses -->
-  <g stroke="#2a2723" stroke-width="1" opacity="0.2">
-    <line x1="40" y1="60" x2="40" y2="68"/><line x1="36" y1="64" x2="44" y2="64"/>
-    <line x1="1160" y1="60" x2="1160" y2="68"/><line x1="1156" y1="64" x2="1164" y2="64"/>
-    <line x1="40" y1="570" x2="40" y2="578"/><line x1="36" y1="574" x2="44" y2="574"/>
-    <line x1="1160" y1="570" x2="1160" y2="578"/><line x1="1156" y1="574" x2="1164" y2="574"/>
+  <text x="96" y="145" fill="#bd766d" font-family="ui-monospace, monospace" font-size="13" font-weight="700" letter-spacing="3">PORTFOLIO / 2026</text>
+  <text x="93" y="292" fill="#efede6" font-family="Arial, Helvetica, sans-serif" font-size="105" font-weight="700" letter-spacing="-7">KIARASH</text>
+  <text x="93" y="395" fill="#08090a" stroke="#efede6" stroke-width="1.5" font-family="Arial, Helvetica, sans-serif" font-size="105" font-weight="700" letter-spacing="-7">AKBARI</text>
+  <path d="M94 431h84" stroke="#bd766d" stroke-width="5"/>
+  <text x="96" y="474" fill="#efede6" font-family="ui-monospace, monospace" font-size="20" font-weight="700" letter-spacing="2">AI &amp; SOFTWARE ENGINEER</text>
+  <text x="96" y="513" fill="#efede6" fill-opacity=".65" font-family="ui-monospace, monospace" font-size="12" letter-spacing="1.5">BACKEND SYSTEMS · APPLIED AI · MACHINE LEARNING</text>
+  <g transform="translate(990 315)" stroke="#efede6" stroke-width="1.2">
+    <circle r="166" stroke-opacity=".18"/>
+    <ellipse rx="154" ry="58" transform="rotate(-30)" stroke-opacity=".65"/>
+    <ellipse rx="154" ry="58" transform="rotate(30)" stroke-opacity=".42"/>
+    <ellipse rx="154" ry="58" transform="rotate(90)" stroke-opacity=".32"/>
+    <circle r="102" stroke-opacity=".22"/>
+    <circle r="48" stroke="#bd766d" stroke-opacity=".9"/>
+    <circle cx="112" cy="-81" r="5" fill="#bd766d" stroke="none"/>
+    <circle cx="-120" cy="45" r="3" fill="#efede6" stroke="none"/>
   </g>
+  <path d="M1119 80h17m-8.5-8.5v17M1119 550h17m-8.5-8.5v17" stroke="#bd766d" stroke-width="1.5"/>
 </svg>

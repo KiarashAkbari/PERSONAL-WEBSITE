@@ -18,9 +18,9 @@ export default function Experience() {
       <div className="divide-y divide-line">
         {EXPERIENCE.map((e, k) => (
           <Reveal key={e.id} delay={k * 70}>
-            <article className="group grid transition-colors duration-300 hover:bg-ink/[0.025] md:grid-cols-12">
+            <article className="experience-entry group grid transition-colors duration-300 hover:bg-ink/[0.025] md:grid-cols-12">
               {/* index + period rail */}
-              <div className="flex items-start justify-between gap-4 border-b border-line px-4 py-6 md:col-span-3 md:border-b-0 md:border-r md:px-6">
+              <div className="experience-meta flex items-start justify-between gap-4 border-b border-line px-4 py-6 md:col-span-3 md:border-b-0 md:border-r md:px-6">
                 <div>
                   <div className="font-mono text-xs font-bold tracking-wider text-acc">
                     [{e.index}]
@@ -37,7 +37,7 @@ export default function Experience() {
 
               {/* role + points */}
               <div className="px-4 py-6 md:col-span-6 md:px-6">
-                <h3 className="font-display text-[clamp(1.2rem,2.2vw,1.75rem)] font-bold leading-snug text-ink">
+                <h3 className="experience-role font-display text-[clamp(1.2rem,2.2vw,1.75rem)] font-bold leading-snug text-ink">
                   {e.role}
                 </h3>
                 <p className="mt-1 text-xs md:text-sm font-semibold text-ink/80">

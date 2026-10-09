@@ -21,7 +21,7 @@ type ThemeCtx = {
 const Ctx = createContext<ThemeCtx | null>(null);
 
 const STORAGE_KEY = "kia-theme";
-const ACCENT = { light: "#f4f2ec", dark: "#22201c" } as const;
+const ACCENT = { light: "#eeece5", dark: "#08090a" } as const;
 
 function readInitial(): Theme {
   if (typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
@@ -30,7 +30,7 @@ function readInitial(): Theme {
     const s = localStorage.getItem(STORAGE_KEY);
     if (s === "dark" || s === "light") return s;
   } catch {}
-  return "light";
+  return "dark";
 }
 
 function applyDom(theme: Theme) {
@@ -143,8 +143,8 @@ export function useTheme(): ThemeCtx {
 export function readPalette() {
   const cs = getComputedStyle(document.documentElement);
   return {
-    paper: cs.getPropertyValue("--paper").trim() || "#f4f2ec",
-    ink: cs.getPropertyValue("--ink").trim() || "#2a2723",
-    acc: cs.getPropertyValue("--acc").trim() || "#dd5223",
+    paper: cs.getPropertyValue("--paper").trim() || "#eeece5",
+    ink: cs.getPropertyValue("--ink").trim() || "#0c0d0e",
+    acc: cs.getPropertyValue("--acc").trim() || "#963e3a",
   };
 }

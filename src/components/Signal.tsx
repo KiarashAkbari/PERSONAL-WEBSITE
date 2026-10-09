@@ -56,7 +56,7 @@ export default function Signal() {
       />
 
       <div className="px-4 py-12 md:px-6 md:py-16">
-        <h2 className="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-tight tracking-tight">
+        <h2 className="signal-title font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-tight tracking-tight">
           <Reveal clip as="span" className="block">
             <span className="block">Have a Role or Project</span>
           </Reveal>
