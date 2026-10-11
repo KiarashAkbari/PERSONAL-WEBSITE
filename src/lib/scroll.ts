@@ -43,7 +43,7 @@ export function startScroll() {
   lenis?.start();
 }
 
-export function scrollToId(id: string) {
+export function scrollToId(id: string, offset = -84) {
   // query first — fail immediately with a console warning rather than silent no-op
   const target = document.querySelector(id);
   if (!target) {
@@ -51,14 +51,14 @@ export function scrollToId(id: string) {
     return;
   }
   if (prefersReducedMotion()) {
-    target.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+    target.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
     return;
   }
   if (!lenis) {
     target.scrollIntoView({ behavior: "smooth" });
     return;
   }
-  lenis.scrollTo(target as HTMLElement, { duration: 1.6, easing: (t) => 1 - Math.pow(1 - t, 4) });
+  lenis.scrollTo(target as HTMLElement, { offset, duration: 1.6, easing: (t) => 1 - Math.pow(1 - t, 4) });
 }
 
 export function scrollTop() {

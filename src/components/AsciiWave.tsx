@@ -12,7 +12,14 @@ const RAMP = " .·:;=+*#%@";
  * keeps it breathing between rain drops. Pure lo-fi physics maths
  * through one monospace grid — the aino.agency signature.
  */
-export default function AsciiWave({ className }: { className?: string }) {
+export default function AsciiWave({
+  className,
+  scale = 1,
+}: {
+  className?: string;
+  /** multiplies the character grid cell — 1 = default, >1 = bigger glyphs */
+  scale?: number;
+}) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef({ rainbow: false });
@@ -41,8 +48,8 @@ export default function AsciiWave({ className }: { className?: string }) {
     let H = 0;
     let cols = 0;
     let rows = 0;
-    const CW = 7;
-    const CH = 12;
+    const CW = Math.round(7 * scale);
+    const CH = Math.round(12 * scale);
     let cur = new Float32Array(0);
     let nxt = new Float32Array(0);
     let running = true;
@@ -216,7 +223,7 @@ export default function AsciiWave({ className }: { className?: string }) {
       wrap.removeEventListener("pointerdown", onDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [scale]);
 
   return (
     <div

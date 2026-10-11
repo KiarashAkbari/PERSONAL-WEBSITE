@@ -1,222 +1,124 @@
 import { useState } from "react";
-import { ArrowUpRight, ChevronDown, Lock, Plus } from "lucide-react";
-import { cn } from "../utils/cn";
+import { ArrowUpRight, ChevronDown, Lock } from "lucide-react";
 import { PROJECTS, type Project } from "../data";
-import SectionHead from "./SectionHead";
+import { cn } from "../utils/cn";
 import AsciiImage from "./AsciiImage";
 import Reveal from "./Reveal";
+import SectionHead from "./SectionHead";
 
-function Chip({ children }: { children: string }) {
+function Diagram({ lines }: { lines: string[] }) {
   return (
-    <span className="border border-line px-2.5 py-1 text-xs font-medium text-ink/75">
-      {children}
-    </span>
+    <pre className="scanlines term iron-screen overflow-x-auto p-4 font-ascii text-[clamp(12px,1.25vw,16px)] leading-[1.5] text-paper/90 md:p-6">
+      {lines.map((line, i) => (
+        <div key={i} className="whitespace-pre">
+          {line || " "}
+        </div>
+      ))}
+    </pre>
   );
 }
 
-function Schematic({ lines, title }: { lines: string[]; title: string }) {
+function Detail({ p }: { p: Project }) {
+  const diagram = p.schematic ?? p.flow;
   return (
-    <details className="group border border-line bg-ink">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-paper marker:hidden">
-        <span>View system sketch</span>
-        <ChevronDown size={16} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden />
-      </summary>
-      <pre className="scanlines relative overflow-x-auto border-t border-line-inv p-4 font-ascii text-[11px] leading-[1.6] text-paper/85 md:p-5">
-        {lines.map((line, i) => (
-          <div key={i}>{line}</div>
-        ))}
-      </pre>
-      <p className="border-t border-line-inv px-4 py-2.5 text-xs leading-relaxed text-paper/75">
-        {title}
-      </p>
-    </details>
-  );
-}
-
-function Item({
-  p,
-  open,
-  onToggle,
-}: {
-  p: Project;
-  open: boolean;
-  onToggle: () => void;
-}) {
-  const hasVisual = Boolean(p.img || p.schematic);
-
-  return (
-    <article className="project-item border-b border-line last:border-b-0">
-      <button
-        onClick={onToggle}
-        data-cursor={open ? "CLOSE" : "DETAILS"}
-        aria-expanded={open}
-        aria-controls={`work-panel-${p.id}`}
-        aria-label={`${open ? "Hide" : "View"} details for ${p.title}`}
-        className={cn(
-          "project-toggle group flex w-full items-center gap-3 px-4 py-5 text-left transition-colors duration-200 md:gap-5 md:px-6",
-          open ? "bg-ink text-paper" : "bg-paper hover:bg-ink/[0.035]"
-        )}
-      >
-        <span className="project-index w-7 shrink-0 font-mono text-xs font-semibold text-acc" aria-hidden>
-          {p.index}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="project-title block font-display text-[clamp(1.25rem,2.8vw,2rem)] font-bold leading-tight">
-            {p.title}
-          </span>
-          <span
-            className={cn(
-              "mt-1 block text-sm leading-relaxed",
-              open ? "text-paper/75" : "text-ink/65"
-            )}
-          >
-            {p.sub}
-          </span>
-        </span>
-        <span className="shrink-0 text-xs font-semibold">
-          {open ? "Close" : "Details"}
-        </span>
-        <Plus
-          size={18}
-          strokeWidth={1.75}
-          className={cn(
-            "shrink-0 transition-transform duration-300",
-            open && "rotate-[135deg] text-acc"
+    <div className="grid gap-10 px-4 pb-10 pt-2 md:grid-cols-12 md:px-6">
+      <div className="flex flex-col gap-7 md:col-span-6">
+        {p.fig && <p className="eyebrow">{p.fig}</p>}
+        <p className="copy text-[16px] text-ink/85">{p.desc}</p>
+        <ul className="flex flex-col">
+          {p.features.map((f, i) => (
+            <li key={f} className="flex gap-4 border-t border-line py-3 text-sm leading-relaxed">
+              <span className="font-mono text-[11px] text-acc">{String(i + 1).padStart(2, "0")}</span>
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap gap-2">
+          {p.stack.map((s) => (
+            <span key={s} className="border border-line px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/80">
+              {s}
+            </span>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-4 pt-1">
+          {p.repo && (
+            <a href={p.repo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 border-b-2 border-acc pb-0.5 text-sm font-bold">
+              Source <ArrowUpRight size={14} aria-hidden />
+            </a>
           )}
-          aria-hidden
-        />
-      </button>
-
-      <div
-        id={`work-panel-${p.id}`}
-        {...(!open ? ({ inert: true } as unknown as Record<string, unknown>) : {})}
-        className={cn(
-          "grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
-          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        )}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <div
-            className={cn(
-              "grid gap-7 border-t border-line bg-paper px-4 py-7 md:px-6 md:py-8",
-              hasVisual && "md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]"
-            )}
-          >
-            <div>
-              <p className="mb-3 text-sm font-medium text-ink/60">
-                {p.year} <span className="mx-1 text-acc">·</span> {p.status}
-              </p>
-              <p className="copy max-w-3xl text-ink/80">{p.desc}</p>
-
-              <h4 className="mt-6 text-base font-semibold text-ink">What I built</h4>
-              <ul className="mt-2 space-y-2 border-t border-line pt-2">
-                {p.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 copy-sm text-ink/75">
-                    <span className="mt-0.5 font-bold text-acc" aria-hidden>·</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {p.flow && (
-                <details className="group mt-5 border-y border-line">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-3 text-sm font-semibold text-ink marker:hidden">
-                    <span>How it works</span>
-                    <ChevronDown size={16} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden />
-                  </summary>
-                  <pre className="scanlines relative mb-3 overflow-x-auto border border-ink bg-ink p-4 font-ascii text-xs leading-relaxed text-paper/85">
-                    {p.flow.map((line, i) => (
-                      <div key={i} className={line.trim() === "▼" || line.trim() === "│" ? "font-bold text-acc" : ""}>
-                        {line}
-                      </div>
-                    ))}
-                  </pre>
-                </details>
-              )}
-
-              <div className="mt-5">
-                <p className="mb-2 text-sm font-semibold text-ink">Built with</p>
-                <div className="flex flex-wrap gap-2">
-                  {p.stack.map((item) => <Chip key={item}>{item}</Chip>)}
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                {p.repo && (
-                  <a
-                    href={p.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="REPO"
-                    aria-label={`Open ${p.title} repository on GitHub`}
-                    className="group inline-flex items-center gap-2 border border-ink bg-ink px-4 py-3 text-sm font-semibold text-paper transition-colors hover:border-acc hover:bg-acc hover:text-ink"
-                  >
-                    View source
-                    <ArrowUpRight size={15} aria-hidden />
-                  </a>
-                )}
-                {p.private && (
-                  <span className="inline-flex items-center gap-2 text-sm text-ink/65">
-                    <Lock size={14} className="text-acc" aria-hidden />
-                    Client code is private
-                  </span>
-                )}
-                {p.live && (
-                  <a
-                    href={p.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="LIVE"
-                    aria-label={`Open ${p.title} live site`}
-                    className="inline-flex items-center gap-2 border border-line px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper"
-                  >
-                    Open live site
-                    <ArrowUpRight size={15} aria-hidden />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {hasVisual && open && (
-              <div className="space-y-3">
-                {p.img ? (
-                  <>
-                    <AsciiImage src={p.img} caption={p.fig} eager={p.id === "nids"} />
-                  </>
-                ) : p.schematic ? (
-                  <Schematic lines={p.schematic} title={p.fig ?? p.title} />
-                ) : null}
-              </div>
-            )}
-          </div>
+          {p.live && (
+            <a href={p.live} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 border-b-2 border-acc pb-0.5 text-sm font-bold">
+              Live <ArrowUpRight size={14} aria-hidden />
+            </a>
+          )}
+          {p.private && (
+            <span className="inline-flex items-center gap-1.5 text-sm text-ink/70">
+              <Lock size={13} aria-hidden /> Private client work — no public source
+            </span>
+          )}
         </div>
       </div>
-    </article>
+      <div className="md:col-span-6">
+        {p.img ? (
+          <AsciiImage src={p.img} caption={p.fig} cols={84} />
+        ) : diagram ? (
+          <Diagram lines={diagram} />
+        ) : null}
+      </div>
+    </div>
   );
 }
 
 export default function Work() {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [open, setOpen] = useState<string | null>(PROJECTS[0]?.id ?? null);
 
   return (
-    <section id="work" className="relative border-b border-line">
-      <SectionHead
-        index="01"
-        title="Selected Work"
-        note="A selection of products and tools, from production software to applied AI."
-      />
-      <Reveal>
-        <div className="divide-y divide-line border-b border-line">
-          {PROJECTS.map((project) => (
-            <Item
-              key={project.id}
-              p={project}
-              open={openId === project.id}
-              onToggle={() => setOpenId(openId === project.id ? null : project.id)}
-            />
-          ))}
-        </div>
-      </Reveal>
+    <section id="work" aria-labelledby="work-title" className="scroll-mt-20">
+      <SectionHead id="work-title" index="01" title="Selected Work" note="Seven projects. Open a row to read the case." />
+      <ul className="border-t border-line">
+        {PROJECTS.map((p) => {
+          const isOpen = open === p.id;
+          return (
+            <li key={p.id} className="border-b border-line">
+              <Reveal>
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={`work-${p.id}`}
+                  onClick={() => setOpen(isOpen ? null : p.id)}
+                  data-cursor={isOpen ? "CLOSE" : "OPEN"}
+                  className={cn(
+                    "group grid w-full grid-cols-[2.5rem_1fr_auto] items-center gap-4 px-4 py-6 text-left transition-colors duration-300 md:grid-cols-[5rem_1fr_7rem_11rem_3rem] md:gap-6 md:px-6 md:py-8",
+                    isOpen ? "bg-ink text-paper" : "hover:bg-ink/[0.04]"
+                  )}
+                >
+                  <span className={cn("font-mono text-xs font-bold", isOpen ? "text-acc" : "text-acc")}>{p.index}</span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-[clamp(1.4rem,3.4vw,2.6rem)] font-bold leading-[1.02] tracking-[-0.03em]">
+                      {p.title}
+                    </span>
+                    <span className={cn("mt-1.5 block text-sm", isOpen ? "text-paper/70" : "text-ink/65")}>{p.sub}</span>
+                  </span>
+                  <span className={cn("hidden font-mono text-xs md:block", isOpen ? "text-paper/70" : "text-ink/65")}>{p.year}</span>
+                  <span className={cn("hidden font-mono text-[11px] uppercase tracking-[0.1em] md:block", isOpen ? "text-paper/70" : "text-ink/65")}>
+                    {p.status}
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    aria-hidden
+                    className={cn("justify-self-end transition-transform duration-500", isOpen && "rotate-180 text-acc")}
+                  />
+                </button>
+              </Reveal>
+              <div id={`work-${p.id}`} className="acc-body" data-open={isOpen}>
+                <div>
+                  <Detail p={p} />
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

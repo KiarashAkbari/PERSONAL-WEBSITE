@@ -124,3 +124,11 @@ This additive note supersedes the earlier palette and typography values above fo
 - **Terminal/art panel (`.term`):** fixed black surface and pale type in either optic. The computer-vision line mesh is rendered in code by `src/components/ScanMesh.tsx`; its SVG landmarks, triangulation, brackets, and numeric annotations are the primary motif, with the scan beam pausing offscreen. The generated botanical study at `public/scan/tulip-analysis.png` is optional, not a project claim; keep labels as HTML captions rather than baking text into an image.
 - **Type:** display text uses the system narrow-sans/sans stack; metadata uses the OS monospace stack; ASCII canvases remain monospace. Use uppercase poster-scale headings sparingly and keep body copy readable.
 - Preserve both interactive ASCII fields and their pointer responses, offscreen pausing, reduced-motion behavior, the short/skip-capable preloader, and the block-box workaround for clipped reveals above. Do not add ruler-number borders or live cursor X/Y readouts; the fine-pointer cursor may keep concise action words.
+
+### v6 redesign — Iron / Swiss-punk (2026-10-11, supersedes the palette and layout notes above)
+- **Direction:** Swiss grid + punk accents, with early-iPhone hardware cues: brushed-steel `iron-bezel` frames, glossy `app-icon` tiles (22% radius), a status bar, a mobile bottom dock, and iOS-style grouped lists (`ios-group` / `ios-row`).
+- **Tokens:** Night (default) graphite `#0c0d0f` / bone `#ecebe6` / signal orange `#ff5a2a`. Day brushed aluminum `#d6d8dc` / ink `#0d0e10` / `#e4361a`. `.term` stays fixed black in both optics.
+- **Type:** system stacks only. `.poster` (display), `.h-section`, `.outline-ink`, `.eyebrow`, `.tape`.
+- **ASCII art is kept and scaled up:** `AsciiField` and `AsciiWave` take a `scale` prop (cell size multiplier). ScanMesh styles live in `src/components/ScanMesh.css`.
+- **Components:** `Nav` (status bar, header, dock, theme switch), `Hero`, `Marquee`, `Work` (accordion), `Experience`, `WaveLab`, `Profile`, `Signal`, `SectionHead`, `Reveal`. The old Preloader, Cursor, MorphText, ThemeToggle, WaveBand were removed.
+- **Content source is unchanged:** `src/data.ts` (no résumé file exists in the repo).

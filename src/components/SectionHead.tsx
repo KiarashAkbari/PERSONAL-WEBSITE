@@ -1,34 +1,27 @@
-import { cn } from "../utils/cn";
 import Reveal from "./Reveal";
 
-type Props = {
+export default function SectionHead({
+  index,
+  title,
+  note,
+  id,
+}: {
   index: string;
   title: string;
   note?: string;
-  dark?: boolean;
-  className?: string;
-};
-
-export default function SectionHead({ index, title, note, dark, className }: Props) {
+  id?: string;
+}) {
   return (
-    <Reveal
-      className={cn(
-        "punk-section-head flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-b px-4 py-6 md:px-6",
-        dark ? "border-line-inv" : "border-line",
-        className
-      )}
-    >
-      <h2 className="punk-section-title font-display text-[clamp(2rem,5vw,3.8rem)] font-bold leading-tight tracking-tight">
-        <span className="punk-section-number mr-3 align-middle font-mono text-xs font-semibold tracking-widest text-acc">
-          {index} /
-        </span>
-        {title}
-      </h2>
-      {note && (
-        <p className="punk-section-note max-w-md pb-1 text-xs md:text-sm leading-relaxed opacity-70">
-          {note}
-        </p>
-      )}
+    <Reveal>
+      <div className="flex flex-col gap-5 border-t border-line px-4 pb-10 pt-6 md:flex-row md:items-end md:justify-between md:px-6">
+        <div className="flex items-baseline gap-4">
+          <span className="tape">{index}</span>
+          <h2 id={id} className="h-section">
+            {title}
+          </h2>
+        </div>
+        {note && <p className="eyebrow max-w-xs leading-relaxed md:text-right">{note}</p>}
+      </div>
     </Reveal>
   );
 }
