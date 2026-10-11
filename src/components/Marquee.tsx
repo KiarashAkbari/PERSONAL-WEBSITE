@@ -1,45 +1,19 @@
-import { cn } from "../utils/cn";
-
-type Props = {
-  items: string[];
-  inverted?: boolean;
-  slow?: boolean;
-  className?: string;
-  label?: string;
-};
-
-export default function Marquee({ items, inverted, slow, className, label }: Props) {
+export default function Marquee({ items }: { items: string[] }) {
   const row = (hidden: boolean) => (
     <div className="flex w-max shrink-0 items-center" aria-hidden={hidden || undefined}>
-      {items.map((it, i) => (
-        <span key={i} className="flex items-center whitespace-nowrap">
-          <span className="px-6 font-medium text-xs md:text-sm tracking-wide">{it}</span>
-          <span className="text-acc font-bold">·</span>
+      {items.map((it) => (
+        <span key={`${hidden ? "b" : "a"}-${it}`} className="flex items-center whitespace-nowrap">
+          <span className="px-6 text-sm font-bold uppercase tracking-[0.1em] md:text-base">{it}</span>
+          <span className="text-acc font-bold" aria-hidden>
+            ✕
+          </span>
         </span>
       ))}
     </div>
   );
-
   return (
-    <div
-      aria-label={label ?? "Ticker"}
-      className={cn(
-        "relative flex items-center overflow-hidden border-y py-3",
-        inverted ? "border-line-inv bg-ink text-paper" : "border-line bg-paper text-ink",
-        className
-      )}
-    >
-      {label && (
-        <span className="absolute left-0 top-0 z-10 border-r border-current/20 bg-inherit px-2 py-0.5 text-[9px] tracking-[0.18em] text-current/60">
-          {label}
-        </span>
-      )}
-      <div
-        className={cn(
-          "marquee-track flex w-max",
-          slow ? "animate-marquee-slow" : "animate-marquee"
-        )}
-      >
+    <div className="overflow-hidden border-y border-line bg-ink py-3.5 text-paper" aria-label="Core technologies">
+      <div className="flex w-max animate-ticker">
         {row(false)}
         {row(true)}
       </div>

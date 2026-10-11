@@ -1,0 +1,71 @@
+/* ScanMesh — computer-vision line study (moved out of index.css). */
+.scan-mesh {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--paper);
+  pointer-events: none;
+}
+.scan-mesh-contours {
+  stroke: currentColor;
+  stroke-width: 0.65;
+  stroke-dasharray: 2 5;
+  stroke-opacity: 0.3;
+}
+.scan-mesh-lines line {
+  stroke: currentColor;
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+.scan-mesh-targets rect,
+.scan-mesh-targets path {
+  stroke: currentColor;
+  stroke-width: 0.75;
+  stroke-opacity: 0.72;
+  vector-effect: non-scaling-stroke;
+}
+.scan-mesh-targets path {
+  stroke: var(--acc);
+  stroke-opacity: 0.85;
+}
+.scan-mesh-nodes circle {
+  fill: var(--ink);
+  stroke: currentColor;
+  stroke-width: 0.85;
+  vector-effect: non-scaling-stroke;
+}
+.scan-mesh-nodes circle:nth-child(7n + 3),
+.scan-mesh-nodes circle:nth-child(11n + 2) {
+  fill: var(--acc);
+}
+.scan-mesh-data {
+  fill: currentColor;
+  font-family: var(--stack-mono);
+  font-size: 6px;
+  letter-spacing: 0.5px;
+  opacity: 0.62;
+}
+.scan-mesh-sweep {
+  stroke: var(--acc);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 5;
+  opacity: 0;
+  transform: translateY(-74px);
+}
+.scan-mesh-active .scan-mesh-sweep {
+  opacity: 0.72;
+  animation: mesh-scan 6s ease-in-out infinite;
+}
+@keyframes mesh-scan {
+  0%, 100% { transform: translateY(-74px); }
+  50% { transform: translateY(74px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-mesh-active .scan-mesh-sweep {
+    animation: none;
+    opacity: 0.32;
+    transform: none;
+  }
+}

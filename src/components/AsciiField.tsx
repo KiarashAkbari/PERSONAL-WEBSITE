@@ -66,7 +66,14 @@ function buildDust(n: number): V3[] {
  * waves through the field. Palette re-reads on optic switch; rainbow
  * mode hue-cycles the ramp (the easter egg, with love to aino.agency).
  */
-export default function AsciiField({ className }: { className?: string }) {
+export default function AsciiField({
+  className,
+  scale = 1,
+}: {
+  className?: string;
+  /** multiplies the character cell size — 1 = default, >1 = bigger glyphs */
+  scale?: number;
+}) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme, rainbow } = useTheme();
@@ -133,7 +140,7 @@ export default function AsciiField({ className }: { className?: string }) {
       canvas.style.width = `${W}px`;
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      fs = Math.max(8, Math.min(13, Math.floor(W / 92)));
+      fs = Math.round(Math.max(8, Math.min(13, Math.floor(W / 92))) * scale);
       cellW = fs * 0.6;
       cellH = fs;
       S = Math.min(W, H) * 0.36;
@@ -344,7 +351,7 @@ export default function AsciiField({ className }: { className?: string }) {
       wrap.removeEventListener("pointerdown", onDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [scale]);
 
   return (
     <div

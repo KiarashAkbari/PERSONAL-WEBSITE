@@ -1,156 +1,82 @@
 import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import Reveal from "./Reveal";
-import SectionHead from "./SectionHead";
-import { GhMark } from "./icons";
 import { CONTACT, GH } from "../data";
 import { scrollTop } from "../lib/scroll";
-
-const ASCII_WAVE = "▁▂▃▄▅▆▇█▇▆▅▄▃▂▁".repeat(6);
+import { GhMark } from "./icons";
+import Reveal from "./Reveal";
+import SectionHead from "./SectionHead";
 
 const CHANNELS = [
-  {
-    id: "MAIL",
-    icon: Mail,
-    title: "Email",
-    value: CONTACT.email,
-    note: "Best way to reach me",
-    href: `mailto:${CONTACT.email}`,
-    cursor: "MAIL",
-  },
-  {
-    id: "GH",
-    icon: GhMark,
-    title: "GitHub",
-    value: "@KiarashAkbari",
-    note: "All public repositories & source code",
-    href: GH,
-    cursor: "GH",
-  },
-  {
-    id: "TEL",
-    icon: Phone,
-    title: "Phone",
-    value: CONTACT.phone,
-    note: `${CONTACT.tz} · Mashhad Local Time`,
-    href: `tel:${CONTACT.phoneHref}`,
-    cursor: "CALL",
-  },
-  {
-    id: "LOC",
-    icon: MapPin,
-    title: "Location",
-    value: CONTACT.location,
-    note: "Remote worldwide · Relocation friendly",
-    href: null,
-    cursor: "SITE",
-  },
-];
+  { id: "mail", icon: Mail, title: "Email", value: CONTACT.email, note: "Best way to reach me", href: `mailto:${CONTACT.email}` },
+  { id: "gh", icon: GhMark, title: "GitHub", value: "@KiarashAkbari", note: "Public repositories & source", href: GH },
+  { id: "tel", icon: Phone, title: "Phone", value: CONTACT.phone, note: `${CONTACT.tz} · Mashhad local time`, href: `tel:${CONTACT.phoneHref}` },
+  { id: "loc", icon: MapPin, title: "Location", value: CONTACT.location, note: "Remote worldwide · Relocation friendly", href: null },
+] as const;
 
 export default function Signal() {
   return (
-    <section id="signal" className="relative border-b border-line">
-      <SectionHead
-        index="04"
-        title="Get in Touch"
-        note="Open to full-time AI and backend roles, select consulting, and useful collaborations."
-      />
+    <section id="signal" aria-labelledby="signal-title" className="scroll-mt-20">
+      <SectionHead id="signal-title" index="04" title="Contact" note="Open to full-time AI and backend roles, select consulting, and useful collaborations." />
 
-      <div className="px-4 py-12 md:px-6 md:py-16">
-        <h2 className="signal-title font-display text-[clamp(2.4rem,6vw,5.5rem)] font-bold leading-tight tracking-tight">
-          <Reveal clip as="span" className="block">
-            <span className="block">Have a Role or Project</span>
-          </Reveal>
-          <Reveal clip as="span" className="block" delay={120}>
-            <span className="block text-acc">
-              in Mind?
-            </span>
-          </Reveal>
-        </h2>
-        <Reveal delay={220}>
-          <p className="copy mt-5 max-w-xl text-base leading-relaxed text-ink/80">
-            I am open to full-time software engineering roles and select consulting work. Send me
-            a note and I will get back to you.
-          </p>
+      <div className="px-4 pb-14 md:px-6 md:pb-20">
+        <Reveal>
+          <h3 className="poster text-[clamp(2.8rem,9vw,8.5rem)] leading-[0.86]">
+            Have a role
+            <br />
+            or project?
+            <span className="text-acc"> Write.</span>
+          </h3>
         </Reveal>
       </div>
 
-      {/* channel cards */}
-      <address className="grid gap-px border-t border-line bg-line not-italic sm:grid-cols-2 lg:grid-cols-4">
+      <div className="ios-group mx-4 md:mx-6">
         {CHANNELS.map((c, i) => {
-          const content = (
+          const body = (
             <>
-              <div className="flex items-center justify-between text-xs font-semibold tracking-wider text-ink/60 group-hover:text-paper/70">
-                <span className="flex items-center gap-2">
-                  <c.icon size={15} className="text-acc" aria-hidden />
-                  {c.title}
-                </span>
-                {c.href && (
-                  <ArrowUpRight
-                    size={15}
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-acc"
-                  />
-                )}
-              </div>
-              <div>
-                <div className="truncate font-mono text-sm md:text-base font-bold text-ink group-hover:text-paper">
-                  {c.value}
-                </div>
-                <div className="mt-1.5 text-xs text-ink/50 group-hover:text-paper/60">
-                  {c.note}
-                </div>
-              </div>
+              <span className="app-icon app-tile-steel grid h-11 w-11 shrink-0 place-items-center">
+                <c.icon size={18} aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-bold uppercase tracking-[0.12em] text-ink/60">{c.title}</span>
+                <span className="mt-1 block truncate font-mono text-sm font-bold md:text-base">{c.value}</span>
+                <span className="mt-1 block text-xs text-ink/60">{c.note}</span>
+              </span>
+              {c.href && <ArrowUpRight size={18} aria-hidden className="shrink-0 text-acc" />}
             </>
           );
-          const cardClass = "group flex h-full flex-col justify-between gap-8 px-4 py-6 md:px-6 lg:py-8";
-
           return (
-            <Reveal key={c.id} delay={i * 80} className="bg-paper">
-              {c.href ? (
-                <a
-                  href={c.href}
-                  target={c.href.startsWith("http") ? "_blank" : undefined}
-                  rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  aria-label={`${c.title}: ${c.value} — ${c.note}`}
-                  data-cursor={c.cursor}
-                  className={`${cardClass} transition-colors duration-300 hover:bg-ink hover:text-paper`}
-                >
-                  {content}
-                </a>
-              ) : (
-                <div className={cardClass}>{content}</div>
-              )}
-            </Reveal>
+            <div key={c.id} className="ios-row">
+              <Reveal delay={i * 70}>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    target={c.href.startsWith("http") ? "_blank" : undefined}
+                    rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    aria-label={`${c.title}: ${c.value}`}
+                    className="group flex items-center gap-5 p-5 transition-colors hover:bg-ink hover:text-paper md:p-7"
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  <div className="flex items-center gap-5 p-5 md:p-7">{body}</div>
+                )}
+              </Reveal>
+            </div>
           );
         })}
-      </address>
+      </div>
 
-      {/* bottom bar */}
-      <footer className="border-t border-line">
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-5 md:px-6 text-xs text-ink/70">
-          <span className="font-medium">
-            © 2026 Kiarash Akbari · AI &amp; Software Engineering
-          </span>
-          <span
-            className="hidden select-none overflow-hidden text-xs text-ink/30 md:block"
-            aria-hidden
-          >
-            {ASCII_WAVE.slice(0, 36)}
-          </span>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-ink/50">
-              React · TypeScript · Tailwind
-            </span>
-            <button
-              onClick={scrollTop}
-              data-cursor="TOP"
-              className="group flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-semibold transition-colors hover:border-acc hover:text-acc"
-            >
-              Back to Top
-              <ArrowUp size={13} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-            </button>
-          </div>
+      <footer className="mt-16 flex flex-col gap-6 border-t border-line px-4 py-8 md:flex-row md:items-end md:justify-between md:px-6">
+        <div className="flex flex-col gap-2">
+          <p className="text-lg font-bold tracking-tight">Kiarash Akbari</p>
+          <p className="eyebrow">© 2026 · Built with React, TypeScript &amp; Vite · Single-file build</p>
         </div>
+        <button
+          type="button"
+          onClick={() => scrollTop()}
+          className="app-icon app-tile-acc inline-flex items-center gap-2 self-start px-5 py-3 font-mono text-[11px] uppercase tracking-[0.14em] md:self-auto"
+        >
+          <ArrowUp size={14} aria-hidden /> Back to top
+        </button>
       </footer>
     </section>
   );
