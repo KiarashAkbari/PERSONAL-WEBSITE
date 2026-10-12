@@ -30,7 +30,7 @@ export default function AsciiWave({
   /* instant palette re-read on optic switch */
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
-      palRef.current = readPalette();
+      palRef.current = readPalette(wrapRef.current);
     });
     return () => cancelAnimationFrame(raf);
   }, [theme]);
@@ -48,8 +48,9 @@ export default function AsciiWave({
     let H = 0;
     let cols = 0;
     let rows = 0;
-    const CW = Math.round(7 * scale);
-    const CH = Math.round(12 * scale);
+    const fs = Math.round(10 * scale);
+    const CW = Math.round(fs * 0.6);
+    const CH = Math.round(fs * 1.15);
     let cur = new Float32Array(0);
     let nxt = new Float32Array(0);
     let running = true;
@@ -57,7 +58,7 @@ export default function AsciiWave({
     let raf = 0;
     let last = 0;
     let lastDrop = 0;
-    palRef.current = readPalette();
+    palRef.current = readPalette(wrap);
     let lastPal = 0;
 
     const disturb = (cx: number, cy: number, r: number, amp: number) => {
@@ -92,7 +93,7 @@ export default function AsciiWave({
           6
         );
       }
-      ctx.font = `10px ui-monospace, "SF Mono", Menlo, Consolas, monospace`;
+      ctx.font = `${fs}px ui-monospace, "SF Mono", Menlo, Consolas, monospace`;
       ctx.textBaseline = "top";
     };
     const ro = new ResizeObserver(resize);
@@ -143,7 +144,7 @@ export default function AsciiWave({
       const t = now / 1000;
       if (now - lastPal > 500) {
         lastPal = now;
-        palRef.current = readPalette();
+        palRef.current = readPalette(wrap);
       }
       const pal = palRef.current;
       const rb = stateRef.current.rainbow;
@@ -157,39 +158,39 @@ export default function AsciiWave({
 
       ctx.clearRect(0, 0, W, H);
 
-      /* ambient sheen — batched per row as a single string */
-      ctx.fillStyle = pal.ink;
-      ctx.globalAlpha = 0.16;
-      for (let y = 1; y <= rows; y++) {
-        let line = "";
-        for (let x = 1; x <= cols; x++) {
-          const sheen = Math.sin(x * 0.31 + t * 0.9) * Math.sin(y * 0.47 - t * 0.6);
-          line += sheen > 0.55 ? "·" : " ";
-        }
-        ctx.fillText(line, CW, y * CH);
-      }
-
-      /* wave crests / troughs — sparse per-cell pass */
+      /* ambient sheen + wave crests/troughs on unified cell grid */
       const w = cols + 2;
       for (let y = 1; y <= rows; y++) {
+        const yOff = y * CH;
+        const rowOff = y * w;
+        const sinY = Math.sin(y * 0.47 - t * 0.6);
         for (let x = 1; x <= cols; x++) {
-          const v = cur[y * w + x];
+          const v = cur[rowOff + x];
           const n = Math.max(-1, Math.min(1, v * 0.55));
           const m = Math.abs(n);
-          if (m < 0.08) continue;
-          const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(m * RAMP.length))];
-          if (ch === " ") continue;
-          if (rb) {
-            ctx.fillStyle = `hsl(${Math.floor(((x / cols) * 220 + t * 60) % 360)} 95% 58%)`;
-            ctx.globalAlpha = 0.28 + m * 0.72;
-          } else if (n > 0.5) {
-            ctx.fillStyle = pal.acc;
-            ctx.globalAlpha = Math.min(1, 0.35 + m * 0.75);
-          } else {
-            ctx.fillStyle = pal.ink;
-            ctx.globalAlpha = 0.14 + m * 0.8;
+          if (m >= 0.08) {
+            const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(m * RAMP.length))];
+            if (ch !== " ") {
+              if (rb) {
+                ctx.fillStyle = `hsl(${Math.floor(((x / cols) * 220 + t * 60) % 360)} 95% 58%)`;
+                ctx.globalAlpha = 0.28 + m * 0.72;
+              } else if (n > 0.5) {
+                ctx.fillStyle = pal.acc;
+                ctx.globalAlpha = Math.min(1, 0.35 + m * 0.75);
+              } else {
+                ctx.fillStyle = pal.ink;
+                ctx.globalAlpha = 0.14 + m * 0.8;
+              }
+              ctx.fillText(ch, x * CW, yOff);
+              continue;
+            }
           }
-          ctx.fillText(ch, x * CW, y * CH);
+          const sheen = Math.sin(x * 0.31 + t * 0.9) * sinY;
+          if (sheen > 0.55) {
+            ctx.fillStyle = pal.ink;
+            ctx.globalAlpha = 0.18;
+            ctx.fillText("·", x * CW, yOff);
+          }
         }
       }
       ctx.globalAlpha = 1;

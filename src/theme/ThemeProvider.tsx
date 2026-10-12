@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -21,7 +22,7 @@ type ThemeCtx = {
 const Ctx = createContext<ThemeCtx | null>(null);
 
 const STORAGE_KEY = "kia-theme";
-const ACCENT = { light: "#eeece5", dark: "#08090a" } as const;
+const ACCENT = { light: "#f5f3ee", dark: "#09090a" } as const;
 
 function readInitial(): Theme {
   if (typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
@@ -48,12 +49,20 @@ function applyDom(theme: Theme) {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(readInitial);
   const [rainbow, setRainbow] = useState(false);
+  const transitionTimerRef = useRef<number>(0);
 
   /* cross-fade window: enable color transitions only during a switch */
   const flashTransitions = useCallback(() => {
     const root = document.documentElement;
     root.classList.add("theme-x");
-    window.setTimeout(() => root.classList.remove("theme-x"), 560);
+    window.clearTimeout(transitionTimerRef.current);
+    transitionTimerRef.current = window.setTimeout(() => {
+      root.classList.remove("theme-x");
+    }, 560);
+  }, []);
+
+  useEffect(() => {
+    return () => window.clearTimeout(transitionTimerRef.current);
   }, []);
 
   const setTheme = useCallback(
@@ -140,11 +149,11 @@ export function useTheme(): ThemeCtx {
 }
 
 /** resolved palette for canvas renderers — re-read per optic switch */
-export function readPalette() {
-  const cs = getComputedStyle(document.documentElement);
+export function readPalette(el?: Element | null) {
+  const cs = getComputedStyle(el ?? document.documentElement);
   return {
-    paper: cs.getPropertyValue("--paper").trim() || "#eeece5",
-    ink: cs.getPropertyValue("--ink").trim() || "#0c0d0e",
-    acc: cs.getPropertyValue("--acc").trim() || "#963e3a",
+    paper: cs.getPropertyValue("--paper").trim() || "#f3f1ec",
+    ink: cs.getPropertyValue("--ink").trim() || "#f3f1ec",
+    acc: cs.getPropertyValue("--acc").trim() || "#e04f3a",
   };
 }
