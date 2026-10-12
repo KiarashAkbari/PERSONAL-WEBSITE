@@ -131,4 +131,17 @@ This additive note supersedes the earlier palette and typography values above fo
 - **Type:** system stacks only. `.poster` (display), `.h-section`, `.outline-ink`, `.eyebrow`, `.tape`.
 - **ASCII art is kept and scaled up:** `AsciiField` and `AsciiWave` take a `scale` prop (cell size multiplier). ScanMesh styles live in `src/components/ScanMesh.css`.
 - **Components:** `Nav` (status bar, header, dock, theme switch), `Hero`, `Marquee`, `Work` (accordion), `Experience`, `WaveLab`, `Profile`, `Signal`, `SectionHead`, `Reveal`. The old Preloader, Cursor, MorphText, ThemeToggle, WaveBand were removed.
-- **Content source is unchanged:** `src/data.ts` (no résumé file exists in the repo).
+- **Content source is unchanged:** `src/data.ts` (backed by the committed `Kiarash_Akbari_Resume_TE.pdf`, also copied to `public/Kiarash_Akbari_Resume_TE.pdf` so it ships in `dist/`).
+
+### v7 redesign — CORTEX // 07 Avant-Garde Neural Atlas (2026-10-12, supersedes layout & palette notes above)
+- **Spatial Multi-Chamber Architecture (not a single vertical page):**
+  - `01 // CORTEX` (`src/chambers/CortexChamber.tsx`): Neural Atrium pairing editorial typography, the interactive 3-layer Synaptic Connectome (`src/components/Connectome.tsx`), and the 3D Cortical Manifold (`AsciiField`).
+  - `02 // SPECIMENS` (`src/chambers/SpecimensChamber.tsx`): Split-stage engineering archive for the 7 projects with domain filtering, interactive step-by-step signal pipeline simulator, and `AsciiImage` dot-matrix toggle.
+  - `03 // SYNAPSE LAB` (`src/chambers/SynapseChamber.tsx`): Coupled machine-perception studio pairing the 2D `AsciiWave` propagation medium with an interactive Computer-Vision Feature Triangulation & Chromatic Pigment Lens over `public/scan/tulip-analysis.png`.
+  - `04 // MEMORY TRACE` (`src/chambers/MemoryChamber.tsx`): Episodic service record (`EXPERIENCE`), interactive Semantic Capability Lobe pathway explorer (`CAPABILITIES`), and academic imprint (`EDUCATION`).
+  - `05 // TRANSMISSION` (`src/chambers/TransmissionChamber.tsx`): Direct communication channels, one-click clipboard copy, monograph PDF link, and interactive Inquiry Signal Composer.
+- **Palette — Monochrome Gallery & Archival Pigment:**
+  - **Obsidian Atelier (`html.dark`, default):** `--paper #09090a`, `--paper-2 #111113`, `--ink #f3f1ec`, `--ink-soft #9a968d`, `--acc #e04f3a` (archival vermilion reserved for active neural pulses).
+  - **Chalk Gallery (`:root`, light):** `--paper #f5f3ee`, `--paper-2 #ebe7de`, `--ink #0b0b0c`, `--ink-soft #5c5952`, `--acc #c43623`.
+  - **Observation Chamber (`.term`):** Fixed `#070708` carbon surface in both optics with `readPalette(el)` reading local container custom properties.
+- **Navigation & Shortcuts:** Hash-synced chambers (`#cortex`, `#specimens`, `#synapse`, `#memory`, `#transmission`, plus legacy hash aliases), keyboard shortcuts `[1–5]` for chambers, `[` / `]` to cycle lobes, `←` / `→` in Specimens, and `[D]` for optic switch.

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { prefersReducedMotionSync } from "../hooks/usePrefersReducedMotion";
 import { cn } from "../utils/cn";
 
@@ -12,24 +12,29 @@ type Burst = { cells: { i: number; t: number }[] };
  * BUGFIX vs upstream: `crossOrigin="anonymous"` is set *before* src
  * so remote (CORS-enabled) captures don't taint the decode canvas.
  * Decode burst plays on first scroll-into-view; hover flips to RAW.
+ * If the remote image fails to load, renders `fallback` when provided
+ * and never shows a broken `<img>` icon.
  */
 export default function AsciiImage({
   src,
   caption,
   cols = 72,
   eager,
+  fallback,
   className,
 }: {
   src: string;
   caption?: string;
   cols?: number;
   eager?: boolean;
+  fallback?: ReactNode;
   className?: string;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [base, setBase] = useState<string[] | null>(null);
   const [shown, setShown] = useState<string[] | null>(null);
-  const [err, setErr] = useState(false);
+  const [tainted, setTainted] = useState(false);
+  const [loadErr, setLoadErr] = useState(false);
   const [hover, setHover] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const progress = useRef(0);
@@ -50,7 +55,8 @@ export default function AsciiImage({
     let cancelled = false;
     setBase(null);
     setShown(null);
-    setErr(false);
+    setTainted(false);
+    setLoadErr(false);
     progress.current = 0;
     const img = new Image();
     img.crossOrigin = "anonymous"; // must precede src assignment
@@ -63,7 +69,7 @@ export default function AsciiImage({
       cv.width = cols;
       cv.height = rows;
       const ctx = cv.getContext("2d", { willReadFrequently: true });
-      if (!ctx) return setErr(true);
+      if (!ctx) return setTainted(true);
       try {
         ctx.drawImage(img, 0, 0, cols, rows);
         const d = ctx.getImageData(0, 0, cols, rows).data;
@@ -80,10 +86,12 @@ export default function AsciiImage({
         }
         setBase(lines);
       } catch {
-        setErr(true); // tainted canvas — fall back to raw capture
+        setTainted(true); // tainted canvas — fall back to raw capture
       }
     };
-    img.onerror = () => setErr(true);
+    img.onerror = () => {
+      if (!cancelled) setLoadErr(true);
+    };
     return () => {
       cancelled = true;
     };
@@ -142,6 +150,10 @@ export default function AsciiImage({
     };
   }, [base, cols]);
 
+  if (loadErr && fallback) {
+    return <>{fallback}</>;
+  }
+
   /* Fit the character grid to its actual card width, including padding. */
   const fs = Math.max(5, Math.min(9, ((containerWidth || 320) - 28) / (cols * 0.6)));
 
@@ -157,16 +169,16 @@ export default function AsciiImage({
       }}
       data-cursor="RAW"
     >
-      <div className="relative border border-line bg-ink">
+      <div className="term iron-screen relative border border-line">
         {/* corners */}
         <div className="plus absolute left-2 top-2 z-10 text-paper/40" />
         <div className="plus absolute right-2 top-2 z-10 text-paper/40" />
         <div className="plus absolute bottom-2 left-2 z-10 text-paper/40" />
         <div className="plus absolute bottom-2 right-2 z-10 text-paper/40" />
 
-        {err ? (
-          <div className="flex min-h-[220px] items-center justify-center p-6 text-[10px] tracking-[0.3em] text-paper/50">
-            Image unavailable
+        {loadErr ? (
+          <div className="flex min-h-[220px] items-center justify-center p-6 font-mono text-xs uppercase tracking-[0.2em] text-paper/60">
+            Preview unavailable
           </div>
         ) : (
           <pre
@@ -177,23 +189,26 @@ export default function AsciiImage({
             {(shown ?? base ?? []).map((l, i) => (
               <div key={i}>{l}</div>
             ))}
-            {!base && <div className="p-6 text-sm">Loading image…</div>}
+            {!base && !tainted && <div className="p-6 font-mono text-xs text-paper/70">Decoding preview…</div>}
           </pre>
         )}
 
-        {/* raw capture — pixel-stepped loader feel on hover */}
-        <img
-          src={src}
-          alt={caption ?? "Project image"}
-          crossOrigin="anonymous"
-          loading={eager ? "eager" : "lazy"}
-          fetchPriority={eager ? "high" : "auto"}
-          decoding={eager ? "sync" : "async"}
-          className={cn(
-            "pixelated absolute inset-0 h-full w-full object-cover transition-opacity duration-150",
-            hover || err ? "opacity-100" : "opacity-0"
-          )}
-        />
+        {/* raw capture — only rendered when the image has not failed to load */}
+        {!loadErr && (
+          <img
+            src={src}
+            alt={caption ?? "Project image"}
+            crossOrigin="anonymous"
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={eager ? "high" : "auto"}
+            decoding={eager ? "sync" : "async"}
+            onError={() => setLoadErr(true)}
+            className={cn(
+              "pixelated absolute inset-0 h-full w-full object-cover transition-opacity duration-150",
+              hover || tainted ? "opacity-100" : "opacity-0"
+            )}
+          />
+        )}
       </div>
 
       {caption && (
@@ -201,7 +216,7 @@ export default function AsciiImage({
           {caption}
         </figcaption>
       )}
-      {!err && (
+      {!loadErr && !tainted && (
         <button
           type="button"
           onClick={() => setHover((value) => !value)}

@@ -85,7 +85,7 @@ export default function AsciiField({
      class flip, so the canvas never lags behind the page */
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
-      palRef.current = readPalette();
+      palRef.current = readPalette(wrapRef.current);
     });
     return () => cancelAnimationFrame(raf);
   }, [theme]);
@@ -127,7 +127,7 @@ export default function AsciiField({
     let spin = 0.6;
     const reduce = prefersReducedMotionSync();
 
-    palRef.current = readPalette();
+    palRef.current = readPalette(wrap);
     let lastPal = 0;
     const grid = new Map<number, { z: number; ch: string; c: string; a: number }>();
 
@@ -188,7 +188,7 @@ export default function AsciiField({
       /* backup re-read — also follows the rainbow accent animation */
       if (now - lastPal > 500) {
         lastPal = now;
-        palRef.current = readPalette();
+        palRef.current = readPalette(wrap);
       }
       const pal = palRef.current;
 
